@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -80,6 +81,11 @@ namespace DataMidLayer
                     s.Gateway = item.SelectSingleNode("gateway").InnerText;
                     s.Type = item.SelectSingleNode("model").InnerText;
                     s.SiteWhereId = item.SelectSingleNode("sitewhere").InnerText;
+                    s.Config.Moni = bool.Parse(ConfigurationManager.AppSettings["是否模拟"]);
+                    s.Config.Remind = bool.Parse(ConfigurationManager.AppSettings["是否提醒"]);
+                    s.Config.OverTimeM = int.Parse(ConfigurationManager.AppSettings["数据超时判定时间"]);
+                    s.Config.MoniIntervalM = int.Parse(ConfigurationManager.AppSettings["数据模拟发送频率"]);
+                    s.Config.RemindIntervalH = int.Parse(ConfigurationManager.AppSettings["邮件提醒频率"]);
                     listSensors.Add(s);
                 }
             }
@@ -126,7 +132,12 @@ namespace DataMidLayer
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var x = DataAccess.SerializeXml<XmlRoot>(DataAccess.HttpGet(sensors[0].XmlApi));
+            XmlRoot rt = DataAccess.SerializeXml<XmlRoot>(DataAccess.HttpGet(sensors[0].XmlApi));
+            List<string> current = new List<string>();
+            foreach (var item in rt.XmlData.ChildRen)
+            {
+                current.Add(item.Name + ":" + item.Current.Value);
+            } 
             Console.WriteLine();            
         }
 
@@ -156,18 +167,29 @@ namespace DataMidLayer
         {
             System.Diagnostics.Process.Start("iexplore.exe", linkLabel1.Text);
         }
-
-      
-
+        Sensor sensor;
         private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             TreeNode node = e.Node;
             if (node.Tag != null)
             {
-                Sensor sensor = node.Tag as Sensor;
+                sensor = node.Tag as Sensor;
                 if (sensor != null)
                 {
                     linkLabel1.Text = sensor.Addr;
+                    string s1 = string.Format("{0}\r\n状态:{1}\r\n更新时间:\r\n{2}", sensor.Data.XmlData.Name, sensor.data.XmlData.Status, DateTime.Parse(sensor.data.XmlData.TimeStr));
+                    string s2 = "";
+                    foreach (string item in sensor.Current)
+                    {
+                        s2 += item + "\r\n";
+                    }
+                    label3.Text = s1;
+                    label4.Text = s2;
+                    checkBox1.Checked = sensor.Config.Remind;
+                    checkBox2.Checked = sensor.Config.Moni;
+                    numericUpDown1.Value = sensor.Config.RemindIntervalH;
+                    numericUpDown2.Value = sensor.Config.MoniIntervalM;
+                    numericUpDown3.Value = sensor.Config.OverTimeM;
                 }
             }
         }

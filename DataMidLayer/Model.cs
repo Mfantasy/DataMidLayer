@@ -13,10 +13,9 @@ namespace DataMidLayer
         {
             public bool Remind { get; set; } //停止时间
             public int OverTimeM { get; set; } //超时时间(分)
-            public int MoniIntervalS { get; set; } //模拟发送频率(秒)
+            public int MoniIntervalM { get; set; } //模拟发送频率(分)
             public bool Moni { get; set; } //是否模拟数据
-            public string MoniValue { get; set; } //模拟数据值
-            public bool Priority { get; set; } //重要?
+            public int RemindIntervalH { get; set; }//提醒频率(时)
         }
       
        
@@ -25,16 +24,45 @@ namespace DataMidLayer
         public string Gateway { get; set; }
         public string Node { get; set; }
         public string Type { get; set; }
-        public Cfg Config { get; set; }
+        private Cfg config = new Cfg();
+        public Cfg Config
+        {
+            get { return config; }
+            set { config = value; }
+        }
 
-        
+
+        public bool Priority { get; set; } //是否为关键设备
+
         public string Feed
         {
             get { return "{ method: \"subscribe\", headers: undefined, resource: \"/fengxi/" + Gateway + "/" + Node + "/" + Type + "\", token: 0 }"; }
         }
-        public string Current
+        public List<string> Current
         {
-            get { return ""; }
+            get
+            {                                                
+                List<string> current = new List<string>();
+                if (data != null)
+                {
+                    foreach (var item in data.XmlData.ChildRen)
+                    {
+                        current.Add(item.Name + ":" + item.Current.Value);
+                    }
+                }
+                return current;
+            }
+        }
+
+        public XmlRoot data;
+
+        public XmlRoot Data
+        {
+            get
+            {
+                data = DataAccess.SerializeXml<XmlRoot>(DataAccess.HttpGet(XmlApi));
+                return data;
+            }
         }
 
         public string XmlApi { get { return "http://api." + Addr.Replace("http://","") + ".xml"; } }

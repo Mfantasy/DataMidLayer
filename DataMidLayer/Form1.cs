@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace DataMidLayer
 {
@@ -17,7 +20,7 @@ namespace DataMidLayer
         {
             InitializeComponent();
             //Load
-            List<Sensor> sensors = LoadConfig();
+            sensors = LoadConfig();
             //DataGridView Initial
             dgvEX.AutoSize = true;
             dgvEX.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
@@ -27,14 +30,40 @@ namespace DataMidLayer
             dgvEX.Columns.Add("time", "异常时间");
             dgvEX.Columns.Add("msg", "异常名称");
             dgvEX.Columns.Add("stack", "调用堆栈");
-            dgvEX.RowHeadersVisible = false;            
-           //treeView
+            dgvEX.RowHeadersVisible = false;
+            //treeView
+            BuildTree();
            
         }
+
+        List<Sensor> sensors;
         DataGridView dgvEX = new DataGridView();
         List<int> indexEX = new List<int>();
 
         #region 方法
+        private void BuildTree()
+        {
+            List<string> types = new List<string>();
+            foreach (var item in sensors)
+            {
+                if(types.Contains(item.Type))
+                {
+                    TreeNode node = new TreeNode(item.Name);
+                    node.Tag = item;                    
+                    treeView1.Nodes[item.Type].Nodes.Add(node);
+                }
+                else
+                {
+                    types.Add(item.Type);
+                    TreeNode nd = new TreeNode(item.Type);
+                    nd.Name = item.Type;
+                    treeView1.Nodes.Add(nd);
+                    TreeNode node = new TreeNode(item.Name);
+                    nd.Nodes.Add(node);
+                    node.Tag = item;
+                }
+            } 
+        }
         List<Sensor> LoadConfig()
         {
             List<Sensor> listSensors = new List<Sensor>();
@@ -49,8 +78,8 @@ namespace DataMidLayer
                     s.Name = item.SelectSingleNode("name").InnerText;
                     s.Node = item.SelectSingleNode("node").InnerText;
                     s.Gateway = item.SelectSingleNode("gateway").InnerText;
-                    s.Model = item.SelectSingleNode("model").InnerText;
-                    s.Id = item.SelectSingleNode("sitewhere").InnerText;
+                    s.Type = item.SelectSingleNode("model").InnerText;
+                    s.SiteWhereId = item.SelectSingleNode("sitewhere").InnerText;
                     listSensors.Add(s);
                 }
             }
@@ -62,15 +91,6 @@ namespace DataMidLayer
         }
 
         #endregion
-
-
-
-
-
-
-
-
-
 
 
 
@@ -92,25 +112,64 @@ namespace DataMidLayer
             labelEX.ForeColor = Color.Black;
         }
 
+
+
+
         private void button1_Click(object sender, EventArgs e)
         {
             int i = dgvEX.Rows.Add("测试设备", "MXtest", DateTime.Now, "ex.msg", "ex.stack");
             dgvEX.Rows[i].DefaultCellStyle.ForeColor = Color.Red;           
             indexEX.Add(i);
             labelEX.ForeColor = Color.Red;
-            labelEX.Text = "新异常_" + indexEX.Count.ToString();
+            labelEX.Text = "异常(" + indexEX.Count.ToString()+")";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var x = DataAccess.SerializeXml<XmlRoot>(DataAccess.HttpGet(sensors[0].XmlApi));
+            Console.WriteLine();            
+        }
+
+        public void SendMailUseZj()
+        {
+            MailAddress EmailFrom = new MailAddress("mfantasy@mfant.com");
+            MailAddress EmailTo = new MailAddress("mengft@txsec.com");
+            MailMessage mailMsg = new MailMessage(EmailFrom, EmailTo);
+            mailMsg.Subject = "测试邮件";
+            mailMsg.Body = "此为测试邮件，可以忽略掉";
+            SmtpClient spClient = new SmtpClient("smtp.qq.com");
+            spClient.EnableSsl = true;
+            spClient.Credentials = new System.Net.NetworkCredential("mfantasy@mfant.com", "ryqmwpnrmoygcbdd");
+            try
+            {
+                spClient.Send(mailMsg);
+                MessageBox.Show("发送成功");
+            }
+            catch (System.Net.Mail.SmtpException ex)
+            {
+                MessageBox.Show(ex.Message, "发送邮件出错");
+            }
         }
         #endregion
 
-        //单独功能: 要显示最新出现异常日期及异常设备.点击进入log.txt|.异常记录.异常表.设备型号,设备名:异常.时间.
-        //
-        //首先转发状况展示:如何展示呢?
-        //设备类型分表. 出异常会有提醒数字(1)()数字颜色.红色:新出现的异常,点击查看异常文件时消失.绿色:模拟数据的设备的数量.
-        //点击绿色设备,会出现选项,配置如何模拟数据值.时间频率等.最后一条数据记录. 设置:功能是否启用.
-        //设备分类详情监测.table. 基于此=>. 
-        //
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("iexplore.exe", linkLabel1.Text);
+        }
 
+      
 
-
+        private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            TreeNode node = e.Node;
+            if (node.Tag != null)
+            {
+                Sensor sensor = node.Tag as Sensor;
+                if (sensor != null)
+                {
+                    linkLabel1.Text = sensor.Addr;
+                }
+            }
+        }
     }
 }

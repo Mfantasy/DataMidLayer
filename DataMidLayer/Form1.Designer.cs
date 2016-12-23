@@ -31,6 +31,15 @@
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -40,25 +49,17 @@
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.labelEX = new System.Windows.Forms.ToolStripStatusLabel();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.SuspendLayout();
             // 
             // treeView1
@@ -95,6 +96,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.numericUpDown3);
             this.groupBox1.Controls.Add(this.label4);
@@ -113,6 +115,97 @@
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "异常转发控制";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(284, 82);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(113, 12);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "超时判定时间(分钟)";
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.Location = new System.Drawing.Point(286, 40);
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(89, 21);
+            this.numericUpDown3.TabIndex = 8;
+            this.numericUpDown3.Value = new decimal(new int[] {
+            24,
+            0,
+            0,
+            0});
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(142, 37);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(35, 24);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "VALUE\r\nVALUE";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(16, 37);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(83, 48);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "微型气象站\r\n状态:live\r\n最近更新时间:\r\ntime\r\n";
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(428, 58);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(89, 21);
+            this.numericUpDown2.TabIndex = 5;
+            this.numericUpDown2.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(426, 95);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(107, 12);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "转发频率(分钟/次)";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(426, 195);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(107, 12);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "提醒频率(小时/次)";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(428, 162);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(89, 21);
+            this.numericUpDown1.TabIndex = 2;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            24,
+            0,
+            0,
+            0});
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(413, 36);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(120, 16);
+            this.checkBox2.TabIndex = 1;
+            this.checkBox2.Text = "数据异常模拟转发";
+            this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // checkBox1
             // 
@@ -140,7 +233,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
-            this.button2.Text = "Test2Get";
+            this.button2.Text = "发送邮件";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -150,9 +243,10 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 12;
             this.listBox1.Items.AddRange(new object[] {
-            "最近10条转发记录"});
+            "log"});
             this.listBox1.Location = new System.Drawing.Point(0, 304);
             this.listBox1.Name = "listBox1";
+            this.listBox1.ScrollAlwaysVisible = true;
             this.listBox1.Size = new System.Drawing.Size(586, 232);
             this.listBox1.TabIndex = 1;
             // 
@@ -201,96 +295,17 @@
             this.labelEX.Text = "无异常";
             this.labelEX.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
             // 
-            // checkBox2
+            // button3
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(413, 36);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(120, 16);
-            this.checkBox2.TabIndex = 1;
-            this.checkBox2.Text = "数据异常模拟转发";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(428, 162);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(89, 21);
-            this.numericUpDown1.TabIndex = 2;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            24,
-            0,
-            0,
-            0});
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(426, 195);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(107, 12);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "提醒频率(小时/次)";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(426, 95);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(107, 12);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "转发频率(分钟/次)";
-            // 
-            // numericUpDown2
-            // 
-            this.numericUpDown2.Location = new System.Drawing.Point(428, 58);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(89, 21);
-            this.numericUpDown2.TabIndex = 5;
-            this.numericUpDown2.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 37);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(83, 48);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "微型气象站\r\n状态:live\r\n最近更新时间:\r\ntime\r\n";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(142, 37);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 24);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "VALUE\r\nVALUE";
-            // 
-            // numericUpDown3
-            // 
-            this.numericUpDown3.Location = new System.Drawing.Point(286, 58);
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(89, 21);
-            this.numericUpDown3.TabIndex = 8;
-            this.numericUpDown3.Value = new decimal(new int[] {
-            24,
-            0,
-            0,
-            0});
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(284, 95);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(113, 12);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "超时判定时间(分钟)";
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button3.Location = new System.Drawing.Point(278, 160);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(97, 47);
+            this.button3.TabIndex = 10;
+            this.button3.Text = "手动重连\r\n适用于订阅时\r\n出现异常";
+            this.button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Form1
             // 
@@ -311,13 +326,13 @@
             this.splitContainer1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -346,6 +361,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.Button button3;
     }
 }
 

@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -86,6 +87,7 @@ namespace DataMidLayer
                     s.Config.OverTimeM = int.Parse(ConfigurationManager.AppSettings["数据超时判定时间"]);
                     s.Config.MoniIntervalM = int.Parse(ConfigurationManager.AppSettings["数据模拟发送频率"]);
                     s.Config.RemindIntervalH = int.Parse(ConfigurationManager.AppSettings["邮件提醒频率"]);
+                    s.CatchEx += S_CatchEx;
                     listSensors.Add(s);
                 }
             }
@@ -95,12 +97,9 @@ namespace DataMidLayer
             }
             return listSensors;
         }
+   
 
         #endregion
-
-
-
-
 
 
         #region 事件
@@ -118,49 +117,31 @@ namespace DataMidLayer
             labelEX.ForeColor = Color.Black;
         }
 
-
-
+        private void S_CatchEx(object sender, EventArgs e)
+        {
+            Sensor ss = sender as Sensor;
+            this.Invoke(new Action(() =>
+            {
+                int i = dgvEX.Rows.Add(ss.Name, ss.Type, DateTime.Now, ss.Error.Msg, ss.Error.StactTrace);
+                dgvEX.Rows[i].DefaultCellStyle.ForeColor = Color.Red;
+                indexEX.Add(i);
+                labelEX.ForeColor = Color.Red;
+                labelEX.Text = "异常(" + indexEX.Count.ToString() + ")";
+            }));
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int i = dgvEX.Rows.Add("测试设备", "MXtest", DateTime.Now, "ex.msg", "ex.stack");
-            dgvEX.Rows[i].DefaultCellStyle.ForeColor = Color.Red;           
-            indexEX.Add(i);
-            labelEX.ForeColor = Color.Red;
-            labelEX.Text = "异常(" + indexEX.Count.ToString()+")";
+            DataSubscribe.BeginSubscribe(sensors);
+            button1.Enabled = false;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            XmlRoot rt = DataAccess.SerializeXml<XmlRoot>(DataAccess.HttpGet(sensors[0].XmlApi));
-            List<string> current = new List<string>();
-            foreach (var item in rt.XmlData.ChildRen)
-            {
-                current.Add(item.Name + ":" + item.Current.Value);
-            } 
-            Console.WriteLine();            
+            
         }
 
-        public void SendMailUseZj()
-        {
-            MailAddress EmailFrom = new MailAddress("mfantasy@mfant.com");
-            MailAddress EmailTo = new MailAddress("mengft@txsec.com");
-            MailMessage mailMsg = new MailMessage(EmailFrom, EmailTo);
-            mailMsg.Subject = "测试邮件";
-            mailMsg.Body = "此为测试邮件，可以忽略掉";
-            SmtpClient spClient = new SmtpClient("smtp.qq.com");
-            spClient.EnableSsl = true;
-            spClient.Credentials = new System.Net.NetworkCredential("mfantasy@mfant.com", "ryqmwpnrmoygcbdd");
-            try
-            {
-                spClient.Send(mailMsg);
-                MessageBox.Show("发送成功");
-            }
-            catch (System.Net.Mail.SmtpException ex)
-            {
-                MessageBox.Show(ex.Message, "发送邮件出错");
-            }
-        }
+      
         #endregion
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -190,8 +171,16 @@ namespace DataMidLayer
                     numericUpDown1.Value = sensor.Config.RemindIntervalH;
                     numericUpDown2.Value = sensor.Config.MoniIntervalM;
                     numericUpDown3.Value = sensor.Config.OverTimeM;
+                    listBox1.DataSource = sensor.Log;
+                    listBox1.Refresh();
                 }
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //手动重连
+            ThreadPool.QueueUserWorkItem((o) => DataSubscribe.StartSubscribe(sensor));
         }
     }
 }

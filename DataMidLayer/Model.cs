@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataMidLayer.Device;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,12 @@ namespace DataMidLayer
 {
     public class Sensor
     {
+        public event EventHandler CatchEx;
+        public void ExCatched()
+        {
+            CatchEx?.Invoke(this, null);
+        }
+
         public class Cfg
         {
             public bool Remind { get; set; } //停止时间
@@ -17,8 +24,62 @@ namespace DataMidLayer
             public bool Moni { get; set; } //是否模拟数据
             public int RemindIntervalH { get; set; }//提醒频率(时)
         }
-      
-       
+        public class ErrorStr
+        {
+            public string Msg { get; set; }
+            public string StactTrace { get; set; }
+        }
+
+        //public 
+        public ErrorStr error = new ErrorStr();
+        public ErrorStr Error { get { return error; } set { error = value; } }
+
+        public List<string> log = new List<string>();
+        public List<string> Log { get { return log; } set { log = value; } }
+
+        public MX SensorModel
+        {
+            get {             
+                MX mx = null;
+                switch (Type.ToUpper())
+                {
+                    case "MXS5000":
+                        mx = new MXS5000();
+                        break;
+                    case "MXS1501":
+                        mx = new MXS1501();
+                        break;
+                    case "MXS1402":
+                        mx = new MXS1402();
+                        break;
+                    case "MXS1204":
+                        mx = new MXS1204();
+                        break;
+                    case "MXN880":
+                        mx = new MXN880();
+                        break;
+                    case "MX9000":
+                        mx = new MX9000();
+                        break;
+                    case "MX7200":
+                        mx = new MX7200();
+                        break;
+                    case "MX6100":
+                        mx = new MX6100();
+                        break;
+                    case "MXS1201":
+                        mx = new MXS1201();
+                        break;
+                    case "MX8000":
+                        mx = new MX8000();
+                        break;
+                    case "MX8100":
+                        mx = new MX8100();
+                        break;
+                }
+                return mx;
+            }
+        }
         public string SiteWhereId { get; set; }
         public string Name { get; set; }
         public string Gateway { get; set; }

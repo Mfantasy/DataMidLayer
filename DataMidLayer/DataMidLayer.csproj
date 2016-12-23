@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\Desktop\Test1215\ForwardToSiteWhere\DataToSiteWhere\bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -48,7 +51,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
-    <Compile Include="DeviceXmlData.cs" />
+    <Compile Include="Device\MX.cs" />
+    <Compile Include="Device\MX6100.cs" />
+    <Compile Include="Device\MX7200.cs" />
+    <Compile Include="Device\MX8000.cs" />
+    <Compile Include="Device\MX8100.cs" />
+    <Compile Include="Device\MX9000.cs" />
+    <Compile Include="Device\MXN880.cs" />
+    <Compile Include="Device\MXS1201.cs" />
+    <Compile Include="Device\MXS1204.cs" />
+    <Compile Include="Device\MXS1402.cs" />
+    <Compile Include="Device\MXS1501.cs" />
+    <Compile Include="Device\MXS5000.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

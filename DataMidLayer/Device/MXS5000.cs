@@ -48,6 +48,8 @@ namespace DataMidLayer.Device
             set { humidity = value; }
         }
         
+
+
         protected override void PostData(JObject jobj, Sensor ss)
         {
             Rain = jobj["body"]["children"][2]["data"][0]["value"].ToString();
@@ -60,6 +62,26 @@ namespace DataMidLayer.Device
             PostS.PostToSW(ss.SiteWhereId, 3, Humidity);
             PostS.PostToSW(ss.SiteWhereId, 4, WindSpeed);
             PostS.PostToSW(ss.SiteWhereId, 5, WindDirection);
+        }
+
+        public override void MoniPostData(Sensor ss)
+        {
+            if (ss.XmlValues.Count == 5)
+            {
+                PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[0]);
+                PostS.PostToSW(ss.SiteWhereId, 4, ss.XmlValues[1]);
+                PostS.PostToSW(ss.SiteWhereId, 5, ss.XmlValues[2]);
+                PostS.PostToSW(ss.SiteWhereId, 2, ss.XmlValues[3]);
+                PostS.PostToSW(ss.SiteWhereId, 3, ss.XmlValues[4]);
+            }
+            else
+            {
+                PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[1]);
+                PostS.PostToSW(ss.SiteWhereId, 4, ss.XmlValues[2]);
+                PostS.PostToSW(ss.SiteWhereId, 5, ss.XmlValues[3]);
+                PostS.PostToSW(ss.SiteWhereId, 2, ss.XmlValues[4]);
+                PostS.PostToSW(ss.SiteWhereId, 3, ss.XmlValues[5]);
+            }
         }
     }
 }

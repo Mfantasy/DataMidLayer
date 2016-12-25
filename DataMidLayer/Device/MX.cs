@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -30,6 +31,7 @@ namespace DataMidLayer.Device
         }
 
         protected abstract void PostData(JObject jobj,Sensor ss);
+        public abstract void MoniPostData(Sensor ss);
             
     }
     public static class PostS

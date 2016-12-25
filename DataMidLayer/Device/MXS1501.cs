@@ -25,5 +25,10 @@ namespace DataMidLayer.Device
             Light = jobj["body"]["children"][2]["data"][0]["value"].ToString();
             PostS.PostToSW(ss.SiteWhereId, 1, Light);
         }
+
+        public override void MoniPostData(Sensor ss)
+        {
+            PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[2]);           
+        }
     }
 }

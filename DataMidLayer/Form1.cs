@@ -35,7 +35,31 @@ namespace DataMidLayer
             dgvEX.RowHeadersVisible = false;
             //treeView
             BuildTree();
-           
+            //事件绑定
+            checkBox1.CheckedChanged += CheckBox1_CheckedChanged;
+            checkBox2.CheckedChanged += CheckBox2_CheckedChanged;
+            numericUpDown2.ValueChanged += NumericUpDown2_ValueChanged;
+            numericUpDown3.ValueChanged += NumericUpDown3_ValueChanged;
+        }
+
+        private void NumericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            sensor.Config.OverTimeM = (int)numericUpDown3.Value;
+        }
+
+        private void NumericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            sensor.Config.MoniIntervalM = (int)numericUpDown2.Value;
+        }
+
+        private void CheckBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            sensor.Config.Moni = checkBox2.Checked;
+        }
+
+        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            sensor.Config.Remind = checkBox1.Checked;
         }
 
         List<Sensor> sensors;
@@ -74,6 +98,7 @@ namespace DataMidLayer
                 XmlDocument xml = new XmlDocument();
                 xml.Load("config.xml");
                 XmlNodeList sensors = xml.FirstChild.SelectNodes("sensor");
+                int i = 0;
                 foreach (XmlNode item in sensors)
                 {
                     Sensor s = new Sensor();
@@ -86,10 +111,11 @@ namespace DataMidLayer
                     s.Config.Remind = bool.Parse(ConfigurationManager.AppSettings["是否提醒"]);
                     s.Config.OverTimeM = int.Parse(ConfigurationManager.AppSettings["数据超时判定时间"]);
                     s.Config.MoniIntervalM = int.Parse(ConfigurationManager.AppSettings["数据模拟发送频率"]);
-                    s.Config.RemindIntervalH = int.Parse(ConfigurationManager.AppSettings["邮件提醒频率"]);
                     s.CatchEx += S_CatchEx;
                     listSensors.Add(s);
+                    i++;
                 }
+                dcount.Text = "设备数量:"+i.ToString();
             }
             catch (Exception ex)
             {
@@ -138,9 +164,9 @@ namespace DataMidLayer
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
+            sensor.SensorModel.MoniPostData(sensor);
         }
-
+        
       
         #endregion
 
@@ -168,7 +194,6 @@ namespace DataMidLayer
                     label4.Text = s2;
                     checkBox1.Checked = sensor.Config.Remind;
                     checkBox2.Checked = sensor.Config.Moni;
-                    numericUpDown1.Value = sensor.Config.RemindIntervalH;
                     numericUpDown2.Value = sensor.Config.MoniIntervalM;
                     numericUpDown3.Value = sensor.Config.OverTimeM;
                     listBox1.DataSource = sensor.Log;
@@ -180,6 +205,7 @@ namespace DataMidLayer
         private void button3_Click(object sender, EventArgs e)
         {
             //手动重连
+            sensor.Log.Clear();
             ThreadPool.QueueUserWorkItem((o) => DataSubscribe.StartSubscribe(sensor));
         }
     }

@@ -34,5 +34,10 @@ namespace DataMidLayer.Device
             PostS.PostToSW(ss.SiteWhereId, 1, WaterLevel);
             PostS.PostToSW(ss.SiteWhereId, 2, AlarmLevel);
         }
+        public override void MoniPostData(Sensor ss)
+        {
+            PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[1]);
+            PostS.PostToSW(ss.SiteWhereId, 2, ss.XmlValues[2]);         
+        }
     }
 }

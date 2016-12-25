@@ -22,7 +22,7 @@ namespace DataMidLayer
             public int OverTimeM { get; set; } //超时时间(分)
             public int MoniIntervalM { get; set; } //模拟发送频率(分)
             public bool Moni { get; set; } //是否模拟数据
-            public int RemindIntervalH { get; set; }//提醒频率(时)
+         
         }
         public class ErrorStr
         {
@@ -80,6 +80,7 @@ namespace DataMidLayer
                 return mx;
             }
         }
+        public bool IsEx { get; set; }
         public string SiteWhereId { get; set; }
         public string Name { get; set; }
         public string Gateway { get; set; }
@@ -99,6 +100,23 @@ namespace DataMidLayer
         {
             get { return "{ method: \"subscribe\", headers: undefined, resource: \"/fengxi/" + Gateway + "/" + Node + "/" + Type + "\", token: 0 }"; }
         }
+
+        public List<string> XmlValues
+        {
+            get
+            {
+                List<string> current = new List<string>();
+                if (data != null)
+                {
+                    foreach (var item in data.XmlData.ChildRen)
+                    {
+                        current.Add(item.Current.Value);
+                    }
+                }
+                return current;
+            }
+        }
+
         public List<string> Current
         {
             get

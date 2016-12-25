@@ -24,5 +24,9 @@ namespace DataMidLayer.Device
             WaterLevel= jobj["body"]["children"][1]["data"][0]["value"].ToString();
             PostS.PostToSW(ss.SiteWhereId, 1, WaterLevel);
         }
+        public override void MoniPostData(Sensor ss)
+        {
+            PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[1]);            
+        }
     }
 }

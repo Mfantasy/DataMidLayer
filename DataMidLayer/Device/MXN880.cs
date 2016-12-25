@@ -36,5 +36,10 @@ namespace DataMidLayer.Device
             PostS.PostToSW(ss.SiteWhereId, 1, ChargeVol);
             PostS.PostToSW(ss.SiteWhereId, 2, BattVol);
         }
+        public override void MoniPostData(Sensor ss)
+        {
+            PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[2]);
+            PostS.PostToSW(ss.SiteWhereId, 2, ss.XmlValues[3]);
+        }
     }
 }

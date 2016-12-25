@@ -20,6 +20,11 @@ namespace DataMidLayer.Device
             set { status = value; }
         }
 
+        public override void MoniPostData(Sensor ss)
+        {
+            PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[1]);
+        }
+
         protected override void PostData(JObject jobj, Sensor ss)
         {
            Status = jobj["body"]["children"][1]["data"][0]["value"].ToString();

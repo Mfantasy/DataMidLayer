@@ -165,8 +165,7 @@ namespace DataMidLayer
         private void button2_Click(object sender, EventArgs e)
         {
             sensor.SensorModel.MoniPostData(sensor);
-        }
-        
+        }        
       
         #endregion
 
@@ -175,6 +174,7 @@ namespace DataMidLayer
             System.Diagnostics.Process.Start("iexplore.exe", linkLabel1.Text);
         }
         Sensor sensor;
+        
         private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             TreeNode node = e.Node;
@@ -183,6 +183,7 @@ namespace DataMidLayer
                 sensor = node.Tag as Sensor;
                 if (sensor != null)
                 {
+                    
                     linkLabel1.Text = sensor.Addr;
                     string s1 = string.Format("{0}\r\n状态:{1}\r\n更新时间:\r\n{2}", sensor.Data.XmlData.Name, sensor.data.XmlData.Status, DateTime.Parse(sensor.data.XmlData.TimeStr));
                     string s2 = "";
@@ -190,6 +191,7 @@ namespace DataMidLayer
                     {
                         s2 += item + "\r\n";
                     }
+                    
                     label3.Text = s1;
                     label4.Text = s2;
                     checkBox1.Checked = sensor.Config.Remind;

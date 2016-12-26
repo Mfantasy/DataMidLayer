@@ -17,15 +17,17 @@ namespace DataMidLayer
 {
     static class DataAccess
     {
+
         public static void SendMailUseZj(string title, string body)
         {
             MailAddress EmailFrom = new MailAddress("mfantasy@mfant.com");
             MailAddress EmailTo = new MailAddress(ConfigurationManager.AppSettings["邮件接收人"]);
             MailMessage mailMsg = new MailMessage(EmailFrom, EmailTo);
-            mailMsg.CC.Add(ConfigurationManager.AppSettings["邮件抄送"]);
+            //mailMsg.CC.Add(ConfigurationManager.AppSettings["邮件抄送"]);
             mailMsg.Subject = title;
             mailMsg.Body = body;
             SmtpClient spClient = new SmtpClient("smtp.qq.com");
+            spClient.Timeout = 600*1000;
             spClient.EnableSsl = true;
             spClient.Credentials = new System.Net.NetworkCredential("mfantasy@mfant.com", "ryqmwpnrmoygcbdd");
 
@@ -35,7 +37,7 @@ namespace DataMidLayer
             }
             catch (System.Net.Mail.SmtpException ex)
             {
-                File.AppendAllText("error.txt", ex.Message + "\r\n发送邮件失败\r\n" + title + "\r\n" + body);
+                File.AppendAllText("error.txt", ex.Message + "\r\n发送邮件失败\r\n" + title + "\r\n" + body+"\r\n"+DateTime.Now.ToString());
             }
         }
         //HttpGetStream
@@ -99,6 +101,7 @@ namespace DataMidLayer
                 tcp.Connect(ConfigurationManager.AppSettings["ip"], Int32.Parse(ConfigurationManager.AppSettings["port"]));
                 //发送指令
                 streamToServer = tcp.GetStream();
+               
                 tcp.ReceiveTimeout = ss.Config.OverTimeM * 60 * 1000;
                 //string command = "{ method: \"subscribe\", headers: undefined, resource: \"/fengxi/" + fengxiGateway + "\", token: 0 }";
                 string command = ss.Feed;
@@ -171,7 +174,7 @@ namespace DataMidLayer
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
                         if (ss.Config.Remind)
                         {
-                            DataAccess.SendMailUseZj(ss.Name + "\t超时", "软件启动以来第一次出现异常的设备");
+                            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(ss.Name + "\t超时", "软件启动以来第一次出现异常的设备\r\n"+ss.Addr)));
                         }                                                
                             ThreadPool.QueueUserWorkItem(new WaitCallback((o) => MoniPost(ss)));                        
                         break;
@@ -271,11 +274,10 @@ namespace DataMidLayer
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
                         if (ss.Config.Remind)
                         {
-                            DataAccess.SendMailUseZj(ss.Name + "\t超时", "");
+                            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(ss.Name + "\t超时", ss.Addr)));
                         }
                         //出现异常了,首先得再启动一个线程不断去接收,等待连接.等正常数据来了.ex = false.然后发个邮件通知
-                        //然后再启动一个模拟线程去给sw发送模拟数据.等ex=false.停.
-                        
+                        //然后再启动一个模拟线程去给sw发送模拟数据.等ex=false.停.                        
                             ThreadPool.QueueUserWorkItem(new WaitCallback((o) => MoniPost(ss)));
                         
                         break;
@@ -359,7 +361,7 @@ namespace DataMidLayer
                     ss.Log.Add("\t超时恢复\t" + DateTime.Now.ToString());
                     if (ss.Config.Remind)
                     {
-                        DataAccess.SendMailUseZj(ss.Name + "\t已恢复正常", "");
+                        ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(ss.Name + "\t已恢复正常", "")));
                     }
                     ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ReSubscribe(ss, i)));
                     

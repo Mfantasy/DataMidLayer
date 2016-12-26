@@ -113,6 +113,13 @@ namespace DataMidLayer
                         current.Add(item.Current.Value);
                     }
                 }
+                else
+                {
+                    foreach (var item in Data.XmlData.ChildRen)
+                    {
+                        current.Add(item.Current.Value);
+                    }
+                }
                 return current;
             }
         }
@@ -125,6 +132,13 @@ namespace DataMidLayer
                 if (data != null)
                 {
                     foreach (var item in data.XmlData.ChildRen)
+                    {
+                        current.Add(item.Name + ":" + item.Current.Value);
+                    }
+                }
+                else
+                {
+                    foreach (var item in Data.XmlData.ChildRen)
                     {
                         current.Add(item.Name + ":" + item.Current.Value);
                     }

@@ -219,13 +219,13 @@
     <model>MX7200</model>
     <sitewhere>e74b0afb-06da-4961-9003-119efd07be8c</sitewhere>
   </sensor>
-  <!--sensor>
+  <sensor>
     <name>绿色屋顶10号楼单体设施液位采集</name>
     <gateway>0100000000000411</gateway>
     <node>10</node>
     <model>MX7200</model>
     <sitewhere>e0befee6-e89e-424e-b436-4fbeb3034cb0</sitewhere>
-  </sensor-->
+  </sensor>
   <!-- 气象站 5-->
   <sensor>
 		<name>总部经济园微气象监测</name>

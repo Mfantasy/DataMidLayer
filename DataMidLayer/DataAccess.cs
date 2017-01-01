@@ -23,7 +23,7 @@ namespace DataMidLayer
             MailAddress EmailFrom = new MailAddress("mfantasy@mfant.com");
             MailAddress EmailTo = new MailAddress(ConfigurationManager.AppSettings["邮件接收人"]);
             MailMessage mailMsg = new MailMessage(EmailFrom, EmailTo);
-            //mailMsg.CC.Add(ConfigurationManager.AppSettings["邮件抄送"]);
+            mailMsg.CC.Add(ConfigurationManager.AppSettings["邮件抄送"]);
             mailMsg.Subject = title;
             mailMsg.Body = body;
             SmtpClient spClient = new SmtpClient("smtp.qq.com");
@@ -169,6 +169,7 @@ namespace DataMidLayer
                 {
                     if (ex.HResult == -2146232800)
                     {
+                        try { tcp.Close(); } catch(Exception ec) { MessageBox.Show(ec.Message); }
                         ss.IsEx = true;
                         ss.Log.Add(ss.Name+"\t超时"+DateTime.Now.ToString());
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
@@ -269,6 +270,7 @@ namespace DataMidLayer
                 {
                     if (ex.HResult == -2146232800)
                     {
+                        try { tcp.Close(); } catch (Exception ec) { MessageBox.Show(ec.Message); }
                         ss.IsEx = true;
                         ss.Log.Add(ss.Name + "\t超时" + DateTime.Now.ToString());
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));

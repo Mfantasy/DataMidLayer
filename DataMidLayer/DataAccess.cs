@@ -87,7 +87,7 @@ namespace DataMidLayer
                     ss.Error.StactTrace = ex.StackTrace;
                     ss.ExCatched();
                     ss.Log.Add("模拟数据:siteWhere服务器异常" + DateTime.Now.ToString());
-                    continue;
+                    return;
                 }             
             }
         }
@@ -169,7 +169,7 @@ namespace DataMidLayer
                 {
                     if (ex.HResult == -2146232800)
                     {
-                        try { tcp.Close(); } catch(Exception ec) { MessageBox.Show(ec.Message); }
+                        try { tcp.Close(); } catch { }
                         ss.IsEx = true;
                         ss.Log.Add(ss.Name+"\t超时"+DateTime.Now.ToString());
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
@@ -270,7 +270,7 @@ namespace DataMidLayer
                 {
                     if (ex.HResult == -2146232800)
                     {
-                        try { tcp.Close(); } catch (Exception ec) { MessageBox.Show(ec.Message); }
+                        try { tcp.Close(); } catch {  }
                         ss.IsEx = true;
                         ss.Log.Add(ss.Name + "\t超时" + DateTime.Now.ToString());
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));

@@ -39,7 +39,8 @@ namespace DataMidLayer.Device
         public static void PostToSW(string deviceId, int index, string data)
         {
             string postData = GetJson(deviceId, index.ToString(), data);
-            RequestPost(postUrl, postData);
+            //RequestPost(postUrl, postData);            
+            RequestPost(postUrl2, postData);
         }
 
         readonly static DateTime UnixTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
@@ -62,6 +63,7 @@ namespace DataMidLayer.Device
             return jobj.ToString();
         }
         static string postUrl = "http://hm-iot.chinacloudapp.cn:80/api/deviceEvents";
+        static string postUrl2 = "http://124.89.55.165:80/api/deviceEvents";
         private static void RequestPost(string posturl, string postData)
         {
             Stream outstream = null;

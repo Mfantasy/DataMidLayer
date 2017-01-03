@@ -47,6 +47,7 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.获取异常设备列表邮件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.labelEX = new System.Windows.Forms.ToolStripStatusLabel();
             this.dcount = new System.Windows.Forms.ToolStripStatusLabel();
@@ -115,12 +116,12 @@
             // 
             // button3
             // 
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button3.Location = new System.Drawing.Point(278, 160);
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.button3.Location = new System.Drawing.Point(278, 173);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(97, 47);
+            this.button3.Size = new System.Drawing.Size(97, 33);
             this.button3.TabIndex = 10;
-            this.button3.Text = "手动重连\r\n适用于订阅时\r\n出现异常";
+            this.button3.Text = "手动重连\r\n(慎用)";
             this.button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -128,6 +129,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Enabled = false;
             this.label5.Location = new System.Drawing.Point(276, 82);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(113, 12);
@@ -136,12 +138,18 @@
             // 
             // numericUpDown3
             // 
+            this.numericUpDown3.Enabled = false;
             this.numericUpDown3.Location = new System.Drawing.Point(278, 58);
+            this.numericUpDown3.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
             this.numericUpDown3.Name = "numericUpDown3";
             this.numericUpDown3.Size = new System.Drawing.Size(89, 21);
             this.numericUpDown3.TabIndex = 8;
             this.numericUpDown3.Value = new decimal(new int[] {
-            24,
+            100,
             0,
             0,
             0});
@@ -167,6 +175,11 @@
             // numericUpDown2
             // 
             this.numericUpDown2.Location = new System.Drawing.Point(428, 58);
+            this.numericUpDown2.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(89, 21);
             this.numericUpDown2.TabIndex = 5;
@@ -198,6 +211,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
+            this.checkBox1.Enabled = false;
             this.checkBox1.Location = new System.Drawing.Point(413, 173);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(120, 16);
@@ -252,7 +266,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.设置ToolStripMenuItem});
+            this.设置ToolStripMenuItem,
+            this.获取异常设备列表邮件ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(842, 25);
@@ -264,6 +279,13 @@
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
             this.设置ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.设置ToolStripMenuItem.Text = "设置";
+            // 
+            // 获取异常设备列表邮件ToolStripMenuItem
+            // 
+            this.获取异常设备列表邮件ToolStripMenuItem.Name = "获取异常设备列表邮件ToolStripMenuItem";
+            this.获取异常设备列表邮件ToolStripMenuItem.Size = new System.Drawing.Size(164, 21);
+            this.获取异常设备列表邮件ToolStripMenuItem.Text = "获取当前异常设备列表邮件";
+            this.获取异常设备列表邮件ToolStripMenuItem.Click += new System.EventHandler(this.获取异常设备列表邮件ToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -344,6 +366,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown3;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ToolStripStatusLabel dcount;
+        private System.Windows.Forms.ToolStripMenuItem 获取异常设备列表邮件ToolStripMenuItem;
     }
 }
 

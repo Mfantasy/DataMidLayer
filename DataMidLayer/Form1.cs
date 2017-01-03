@@ -108,7 +108,7 @@ namespace DataMidLayer
                     s.Type = item.SelectSingleNode("model").InnerText;
                     s.SiteWhereId = item.SelectSingleNode("sitewhere").InnerText;
                     s.Config.Moni = bool.Parse(ConfigurationManager.AppSettings["是否模拟"]);
-                    s.Config.Remind = bool.Parse(ConfigurationManager.AppSettings["是否提醒"]);
+                    s.Config.Remind = false;//bool.Parse(ConfigurationManager.AppSettings["是否提醒"]);
                     s.Config.OverTimeM = int.Parse(ConfigurationManager.AppSettings["数据超时判定时间"]);
                     s.Config.MoniIntervalM = int.Parse(ConfigurationManager.AppSettings["数据模拟发送频率"]);
                     s.CatchEx += S_CatchEx;
@@ -160,6 +160,26 @@ namespace DataMidLayer
         {
             DataSubscribe.BeginSubscribe(sensors);
             button1.Enabled = false;
+            Thread thMail = new Thread(SendMail);
+            thMail.IsBackground = true;
+            thMail.Start();
+        }
+        void SendMail()
+        {
+            bool remind = bool.Parse(ConfigurationManager.AppSettings["是否提醒"]);
+            while (remind)
+            {
+                Thread.Sleep(24 * 60 * 60 * 1000);
+                List<Sensor> exSensors = sensors.FindAll(ss => ss.IsEx);
+                string title = "沣西海绵城市设备状态提醒";
+                string body = "当前异常设备(超时判定时间:" + ConfigurationManager.AppSettings["数据超时判定时间"] + ")分钟\r\n";
+                foreach (Sensor item in exSensors)
+                {
+                    body += item.Name + "\t" + item.Addr + "\r\n";
+                }
+                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(title, body)));
+            }
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -207,8 +227,25 @@ namespace DataMidLayer
         private void button3_Click(object sender, EventArgs e)
         {
             //手动重连
-            sensor.Log.Clear();
-            ThreadPool.QueueUserWorkItem((o) => DataSubscribe.StartSubscribe(sensor));
+            try
+            {
+                sensor.Log.Clear();
+                ThreadPool.QueueUserWorkItem((o) => DataSubscribe.StartSubscribe(sensor));
+            }
+            catch(Exception ex) { MessageBox.Show(ex.Message); }
+        } 
+
+        private void 获取异常设备列表邮件ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<Sensor> exSensors = sensors.FindAll(ss => ss.IsEx);
+            string title = "沣西海绵城市设备状态提醒";
+            string body = "当前异常设备(超时判定时间:" + ConfigurationManager.AppSettings["数据超时判定时间"] + ")分钟\r\n";
+            foreach (Sensor item in exSensors)
+            {
+                body += item.Name + "\t" + item.Addr + "\r\n";
+            }
+            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(title, body)));
+            MessageBox.Show("邮件已发送,请注意查收");
         }
     }
 }

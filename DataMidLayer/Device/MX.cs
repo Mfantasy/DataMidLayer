@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -36,11 +37,19 @@ namespace DataMidLayer.Device
     }
     public static class PostS
     {
+        static bool isPostBefore = bool.Parse(ConfigurationManager.AppSettings["Post到原服务器"]);
+        static bool isPostAfter = bool.Parse(ConfigurationManager.AppSettings["Post新服务器"]);
         public static void PostToSW(string deviceId, int index, string data)
         {
             string postData = GetJson(deviceId, index.ToString(), data);
-            //RequestPost(postUrl, postData);            
-            RequestPost(postUrl2, postData);
+            if (isPostBefore)
+            {
+                RequestPost(postUrl, postData);
+            }
+            if (isPostAfter)
+            {
+                RequestPost(postUrl2, postData);
+            }
         }
 
         readonly static DateTime UnixTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

@@ -168,8 +168,7 @@ namespace DataMidLayer
                 catch (Exception ex)
                 {
                     if (ex.HResult == -2146232800)
-                    {
-                        try { tcp.Close(); } catch { }
+                    {                    
                         ss.IsEx = true;
                         ss.Log.Add(ss.Name+"\t超时"+DateTime.Now.ToString());
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
@@ -269,8 +268,7 @@ namespace DataMidLayer
                 catch (Exception ex)
                 {
                     if (ex.HResult == -2146232800)
-                    {
-                        try { tcp.Close(); } catch {  }
+                    {                   
                         ss.IsEx = true;
                         ss.Log.Add(ss.Name + "\t超时" + DateTime.Now.ToString());
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
@@ -305,7 +303,7 @@ namespace DataMidLayer
             TcpClient tcp = new TcpClient();
             NetworkStream streamToServer = null;
             try
-            {
+            {                
                 tcp.Connect(ConfigurationManager.AppSettings["ip"], Int32.Parse(ConfigurationManager.AppSettings["port"]));
                 //发送指令
                 streamToServer = tcp.GetStream();

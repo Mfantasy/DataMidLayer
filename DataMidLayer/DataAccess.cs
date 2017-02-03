@@ -27,7 +27,7 @@ namespace DataMidLayer
             mailMsg.Subject = title;
             mailMsg.Body = body;
             SmtpClient spClient = new SmtpClient("smtp.qq.com");
-            spClient.Timeout = 600*1000;
+            spClient.Timeout = 600 * 1000;
             spClient.EnableSsl = true;
             spClient.Credentials = new System.Net.NetworkCredential("mfantasy@mfant.com", "ryqmwpnrmoygcbdd");
 
@@ -37,7 +37,7 @@ namespace DataMidLayer
             }
             catch (System.Net.Mail.SmtpException ex)
             {
-                File.AppendAllText("error.txt", ex.Message + "\r\n发送邮件失败\r\n" + title + "\r\n" + body+"\r\n"+DateTime.Now.ToString());
+                File.AppendAllText("error.txt", ex.Message + "\r\n发送邮件失败\r\n" + title + "\r\n" + body + "\r\n" + DateTime.Now.ToString());
             }
         }
         //HttpGetStream
@@ -77,7 +77,7 @@ namespace DataMidLayer
                 {
                     if (ss.Config.Moni)
                     {
-                        ss.SensorModel.MoniPostData(ss);                    
+                        ss.SensorModel.MoniPostData(ss);
                     }
                     Thread.Sleep(ss.Config.MoniIntervalM * 60 * 1000);
                 }
@@ -86,9 +86,9 @@ namespace DataMidLayer
                     ss.Error.Msg = ex.Message;
                     ss.Error.StactTrace = ex.StackTrace;
                     ss.ExCatched();
-                    ss.Log.Add("模拟数据:siteWhere服务器异常" + DateTime.Now.ToString());
+                    //ss.Log.Add("自动数据Post:siteWhere服务器异常" + DateTime.Now.ToString());
                     return;
-                }             
+                }
             }
         }
 
@@ -101,7 +101,7 @@ namespace DataMidLayer
                 tcp.Connect(ConfigurationManager.AppSettings["ip"], Int32.Parse(ConfigurationManager.AppSettings["port"]));
                 //发送指令
                 streamToServer = tcp.GetStream();
-               
+
                 tcp.ReceiveTimeout = ss.Config.OverTimeM * 60 * 1000;
                 //string command = "{ method: \"subscribe\", headers: undefined, resource: \"/fengxi/" + fengxiGateway + "\", token: 0 }";
                 string command = ss.Feed;
@@ -153,7 +153,8 @@ namespace DataMidLayer
                         ss.Error.Msg = pex.Message;
                         ss.Error.StactTrace = pex.StackTrace;
                         ss.ExCatched();
-                        ss.Log.Add("siteWhere服务器异常" + DateTime.Now.ToString());
+                        //ss.Log.Add("siteWhere服务器异常" + DateTime.Now.ToString());
+                        //ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj("[异常]数据转发", "siteWhere服务器异常\r\n" + pex.Message + "\r\n" + pex.StackTrace + "\r\n" + ss.Name)));
                         continue;
                     }
                     if (i == 0)
@@ -167,16 +168,17 @@ namespace DataMidLayer
                 }
                 catch (Exception ex)
                 {
+                    try { tcp.Close(); } catch (Exception exx) { ss.Log.Add(exx.Message); }
                     if (ex.HResult == -2146232800)
-                    {                    
-                        ss.IsEx = true;
-                        ss.Log.Add(ss.Name+"\t超时"+DateTime.Now.ToString());
+                    {                                                
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
+                        ss.IsEx = true;
+                        ss.Log.Add(ss.Name + "\t超时\t已尝试重连," + DateTime.Now.ToString());
                         if (ss.Config.Remind)
                         {
-                            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(ss.Name + "\t超时", "软件启动以来第一次出现异常的设备\r\n"+ss.Addr)));
-                        }                                                
-                            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => MoniPost(ss)));                        
+                            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(ss.Name + "\t超时", "软件启动以来第一次出现异常的设备\r\n" + ss.Addr)));
+                        }
+                        ThreadPool.QueueUserWorkItem(new WaitCallback((o) => MoniPost(ss)));
                         break;
                     }
                     else
@@ -188,7 +190,7 @@ namespace DataMidLayer
                         Thread.Sleep(10 * 60 * 1000);
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ReSubscribe(ss, i)));
 
-                        ss.Log.Add("\t" + ex.Message + "\t" + DateTime.Now + "\t尝试重连");
+                        ss.Log.Add("\t" + ex.Message + "\t" + DateTime.Now);
                         break;
                     }
                 }
@@ -240,9 +242,9 @@ namespace DataMidLayer
                     {
                         JObject.Parse(str);
                     }
-                    catch 
+                    catch
                     {
-                        continue;                        
+                        continue;
                     }
                     try
                     {
@@ -253,13 +255,15 @@ namespace DataMidLayer
                         ss.Error.Msg = pex.Message;
                         ss.Error.StactTrace = pex.StackTrace;
                         ss.ExCatched();
-                        ss.Log.Add("siteWhere服务器异常" + DateTime.Now.ToString());
+                        //ss.Log.Add("siteWhere服务器异常" + DateTime.Now.ToString());
+                        //ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj("[异常]数据转发", "siteWhere服务器异常\r\n" + pex.Message + "\r\n" + pex.StackTrace + "\r\n" + ss.Name)));
                         continue;
                     }
                     if (j == 0)
                     {
                         ss.Log.Add("\t重连post到siteWhere请求成功\t" + DateTime.Now.ToString());
                     }
+                    ss.IsEx = false;
                     i++;
                     j++;
                     ss.Log[2] = "\t次数:\t" + i.ToString() + "\t" + DateTime.Now.ToString();
@@ -267,30 +271,28 @@ namespace DataMidLayer
                 }
                 catch (Exception ex)
                 {
+                    try { tcp.Close(); } catch (Exception exx) { ss.Log.Add(exx.Message); }
                     if (ex.HResult == -2146232800)
-                    {                   
-                        ss.IsEx = true;
-                        ss.Log.Add(ss.Name + "\t超时" + DateTime.Now.ToString());
+                    {
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
+                        ss.IsEx = true;
+                        ss.Log.Add(ss.Name + "\t超时\t已尝试重连" + DateTime.Now.ToString());
+                        
                         if (ss.Config.Remind)
                         {
                             ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(ss.Name + "\t超时", ss.Addr)));
-                        }
-                        //出现异常了,首先得再启动一个线程不断去接收,等待连接.等正常数据来了.ex = false.然后发个邮件通知
-                        //然后再启动一个模拟线程去给sw发送模拟数据.等ex=false.停.                        
-                            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => MoniPost(ss)));
-                        
+                        }                               
+                        ThreadPool.QueueUserWorkItem(new WaitCallback((o) => MoniPost(ss)));
+
                         break;
                     }
                     else
                     {
-                                               
+
                         ss.Error.Msg = ex.Message;
                         ss.Error.StactTrace = ex.StackTrace;
-                        ss.ExCatched();
-                        Thread.Sleep(10 * 60 * 1000);
+                        ss.ExCatched();                        
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ReSubscribe(ss, i)));
-
                         ss.Log.Add("\t" + ex.Message + "\t" + DateTime.Now + "\t尝试重连");
                         break;
                     }
@@ -301,9 +303,10 @@ namespace DataMidLayer
         public static void ExSubscribe(Sensor ss, int i)
         {
             TcpClient tcp = new TcpClient();
+            tcp.ReceiveTimeout = ss.Config.OverTimeM * 60 * 1000;
             NetworkStream streamToServer = null;
             try
-            {                
+            {
                 tcp.Connect(ConfigurationManager.AppSettings["ip"], Int32.Parse(ConfigurationManager.AppSettings["port"]));
                 //发送指令
                 streamToServer = tcp.GetStream();
@@ -354,26 +357,28 @@ namespace DataMidLayer
                         ss.Error.Msg = pex.Message;
                         ss.Error.StactTrace = pex.StackTrace;
                         ss.ExCatched();
-                        ss.Log.Add("siteWhere服务器异常"+DateTime.Now.ToString());
+                       // ss.Log.Add("siteWhere服务器异常" + DateTime.Now.ToString());
+                        //ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj("[异常]数据转发", "siteWhere服务器异常\r\n" + pex.Message + "\r\n" + pex.StackTrace + "\r\n" + ss.Name)));
                         continue;
                     }
                     ss.IsEx = false;
-                    ss.Log.Add("\t超时恢复\t" + DateTime.Now.ToString());
+                    ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ReSubscribe(ss, i)));
+                    ss.Log.Add("\t重连恢复\t" + DateTime.Now.ToString());
+                    try { tcp.Close(); } catch (Exception exx) { ss.Log.Add(exx.Message); }
                     if (ss.Config.Remind)
                     {
                         ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(ss.Name + "\t已恢复正常", "")));
-                    }
-                    ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ReSubscribe(ss, i)));
-                    
+                    }                    
                     break;
 
                 }
                 catch (Exception ex)
                 {
-                    ss.Error.Msg = ex.Message;
-                    ss.Error.StactTrace = ex.StackTrace;
-                    ss.ExCatched();
-                    Thread.Sleep(10 * 60 * 1000);
+                    try { tcp.Close(); } catch (Exception exx) { ss.Log.Add(exx.Message); }
+                    //ss.Error.Msg = ex.Message;
+                    //ss.Error.StactTrace = ex.StackTrace;
+                    //ss.ExCatched();
+                    //Thread.Sleep(10 * 60 * 1000);
                     ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
 
                     break;

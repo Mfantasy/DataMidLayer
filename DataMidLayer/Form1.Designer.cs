@@ -68,14 +68,16 @@
             this.treeView1.Location = new System.Drawing.Point(0, 0);
             this.treeView1.Margin = new System.Windows.Forms.Padding(0);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(252, 536);
+            this.treeView1.Size = new System.Drawing.Size(252, 511);
             this.treeView1.TabIndex = 0;
             this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 25);
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(0, 26);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -89,7 +91,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.button2);
             this.splitContainer1.Panel2.Controls.Add(this.listBox1);
             this.splitContainer1.Panel2.Controls.Add(this.linkLabel1);
-            this.splitContainer1.Size = new System.Drawing.Size(842, 536);
+            this.splitContainer1.Size = new System.Drawing.Size(842, 511);
             this.splitContainer1.SplitterDistance = 252;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -107,7 +109,7 @@
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.groupBox1.Location = new System.Drawing.Point(0, 61);
+            this.groupBox1.Location = new System.Drawing.Point(0, 36);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(586, 243);
             this.groupBox1.TabIndex = 6;
@@ -117,11 +119,11 @@
             // button3
             // 
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button3.Location = new System.Drawing.Point(278, 173);
+            this.button3.Location = new System.Drawing.Point(428, 195);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(97, 33);
+            this.button3.Size = new System.Drawing.Size(97, 22);
             this.button3.TabIndex = 10;
-            this.button3.Text = "手动重连\r\n(慎用)";
+            this.button3.Text = "断线重连\r\n";
             this.button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -212,7 +214,7 @@
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.Enabled = false;
-            this.checkBox1.Location = new System.Drawing.Point(413, 173);
+            this.checkBox1.Location = new System.Drawing.Point(413, 152);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(120, 16);
             this.checkBox1.TabIndex = 0;
@@ -246,7 +248,7 @@
             this.listBox1.ItemHeight = 12;
             this.listBox1.Items.AddRange(new object[] {
             "log"});
-            this.listBox1.Location = new System.Drawing.Point(0, 304);
+            this.listBox1.Location = new System.Drawing.Point(0, 279);
             this.listBox1.Name = "listBox1";
             this.listBox1.ScrollAlwaysVisible = true;
             this.listBox1.Size = new System.Drawing.Size(586, 232);

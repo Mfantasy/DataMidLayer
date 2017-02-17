@@ -109,9 +109,9 @@
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.groupBox1.Location = new System.Drawing.Point(0, 36);
+            this.groupBox1.Location = new System.Drawing.Point(0, 61);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(586, 243);
+            this.groupBox1.Size = new System.Drawing.Size(586, 242);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "异常转发控制";
@@ -119,7 +119,7 @@
             // button3
             // 
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button3.Location = new System.Drawing.Point(428, 195);
+            this.button3.Location = new System.Drawing.Point(428, 174);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(97, 22);
             this.button3.TabIndex = 10;
@@ -233,7 +233,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(499, 32);
+            this.button2.Location = new System.Drawing.Point(418, 3);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
@@ -248,10 +248,10 @@
             this.listBox1.ItemHeight = 12;
             this.listBox1.Items.AddRange(new object[] {
             "log"});
-            this.listBox1.Location = new System.Drawing.Point(0, 279);
+            this.listBox1.Location = new System.Drawing.Point(0, 303);
             this.listBox1.Name = "listBox1";
             this.listBox1.ScrollAlwaysVisible = true;
-            this.listBox1.Size = new System.Drawing.Size(586, 232);
+            this.listBox1.Size = new System.Drawing.Size(586, 208);
             this.listBox1.TabIndex = 1;
             // 
             // linkLabel1
@@ -279,8 +279,8 @@
             // 设置ToolStripMenuItem
             // 
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
-            this.设置ToolStripMenuItem.Text = "设置";
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.设置ToolStripMenuItem.Text = "更新说明";
             // 
             // 获取异常设备列表邮件ToolStripMenuItem
             // 
@@ -319,8 +319,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(842, 561);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;

@@ -75,11 +75,11 @@ namespace DataMidLayer
             {
                 try
                 {
+                    Thread.Sleep(ss.Config.MoniIntervalM * 60 * 1000);
                     if (ss.Config.Moni)
                     {
                         ss.SensorModel.MoniPostData(ss);
                     }
-                    Thread.Sleep(ss.Config.MoniIntervalM * 60 * 1000);
                 }
                 catch (Exception ex)
                 {
@@ -87,7 +87,7 @@ namespace DataMidLayer
                     ss.Error.StactTrace = ex.StackTrace;
                     ss.ExCatched();
                     //ss.Log.Add("自动数据Post:siteWhere服务器异常" + DateTime.Now.ToString());
-                    return;
+                    continue;
                 }
             }
         }

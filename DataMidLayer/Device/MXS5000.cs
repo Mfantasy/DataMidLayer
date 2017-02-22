@@ -61,7 +61,7 @@ namespace DataMidLayer.Device
             PostS.PostToSW(ss.SiteWhereId, 2, Temperature);
             PostS.PostToSW(ss.SiteWhereId, 3, Humidity);
             PostS.PostToSW(ss.SiteWhereId, 4, WindSpeed);
-            PostS.PostToSW(ss.SiteWhereId, 51, WindDirection);
+            PostS.PostToSW(ss.SiteWhereId, 5, WindDirection);
         }
 
         public override void MoniPostData(Sensor ss)

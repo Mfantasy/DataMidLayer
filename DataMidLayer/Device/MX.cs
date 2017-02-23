@@ -35,6 +35,20 @@ namespace DataMidLayer.Device
         public abstract void MoniPostData(Sensor ss);
             
     }
+
+    class RequestException : Exception
+    {
+        public string sender = "";
+        public override string Message
+        {
+            get
+            {
+                return sender +"\t" +  base.Message ;    
+            }
+        }
+    }
+
+
     public static class PostS
     {
         static bool isPostBefore = bool.Parse(ConfigurationManager.AppSettings["Post到原服务器"]);
@@ -44,12 +58,34 @@ namespace DataMidLayer.Device
             string postData = GetJson(deviceId, index.ToString(), data);
             if (isPostBefore)
             {
-                RequestPost(postUrl, postData);
+                try
+                {
+                    RequestPost(postUrl, postData);
+                }
+                catch (RequestException ex)
+                {
+                    ex.sender = "原服务器";
+                    throw ex;
+                }
+                
             }
             if (isPostAfter)
             {
-                RequestPost(postUrl2, postData);
+                try
+                {
+                    RequestPost(postUrl2, postData);
+                }
+                catch (RequestException ex)
+                {
+                    ex.sender = "新服务器";
+                    throw ex;
+                }
             }
+        }
+
+        static void QuePost()
+        {
+
         }
 
         readonly static DateTime UnixTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

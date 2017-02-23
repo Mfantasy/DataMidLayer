@@ -52,7 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\Desktop\Test1215\ForwardToSiteWhere\DataToSiteWhere\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\Smeshlink-Client\Smeshlink海绵城市Client\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

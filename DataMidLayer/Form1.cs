@@ -158,11 +158,22 @@ namespace DataMidLayer
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DataSubscribe.BeginSubscribe(sensors);
-            button1.Enabled = false;
-            Thread thMail = new Thread(SendMail);
-            thMail.IsBackground = true;
-            thMail.Start();
+            try
+            {
+                MessageBox.Show("1");
+                DataSubscribe.BeginSubscribe(sensors);
+                MessageBox.Show("2");
+                button1.Enabled = false;
+                Thread thMail = new Thread(SendMail);
+                thMail.IsBackground = true;
+                thMail.Start();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+           
         }
         void SendMail()
         {

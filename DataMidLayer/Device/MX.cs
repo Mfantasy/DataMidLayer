@@ -38,14 +38,29 @@ namespace DataMidLayer.Device
 
     class RequestException : Exception
     {
-        public string sender = "";
+        public RequestException(Exception ex,string sender)
+        {
+            this.msg = ex.Message;
+            this.st = ex.StackTrace;
+            this.sender = sender;
+        }
+        string sender = "";
+        string msg = "";
+        string st = "";
         public override string Message
         {
             get
             {
-                return sender +"\t" +  base.Message ;    
+                return sender + "\t" + msg;
             }
         }
+        public override string StackTrace
+        {
+            get
+            {
+                return this.st;
+            }
+        }                            
     }
 
 
@@ -62,10 +77,10 @@ namespace DataMidLayer.Device
                 {
                     RequestPost(postUrl, postData);
                 }
-                catch (RequestException ex)
+                catch (Exception ex)
                 {
-                    ex.sender = "原服务器";
-                    throw ex;
+                    RequestException rex = new RequestException(ex, "原服务器");
+                    throw rex;
                 }
                 
             }
@@ -75,10 +90,10 @@ namespace DataMidLayer.Device
                 {
                     RequestPost(postUrl2, postData);
                 }
-                catch (RequestException ex)
+                catch (Exception ex)
                 {
-                    ex.sender = "新服务器";
-                    throw ex;
+                    RequestException rex = new RequestException(ex,"新服务器");                                        
+                    throw rex;
                 }
             }
         }

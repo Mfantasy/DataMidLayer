@@ -5,6 +5,7 @@ using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 
 namespace DataMidLayer.Device
 {
@@ -92,15 +93,34 @@ namespace DataMidLayer.Device
                 }
                 catch (Exception ex)
                 {
-                    RequestException rex = new RequestException(ex,"新服务器");                                        
+                    RequestException rex = new RequestException(ex,"新服务器");
+                    postDatas.Add(postData);
                     throw rex;
                 }
             }
         }
 
-        static void QuePost()
+        static List<string> postDatas = new List<string>();
+        public static void QuePost()
         {
-
+            //有个死循环,死循环不断去读错误列表,如果错误列表有项,那么就Req.Req失败了,休息5秒继续Req.
+            while (true)
+            {
+                if (postDatas.Count > 0)
+                {
+                    string postData = postDatas[0];
+                    postDatas.RemoveAt(0);
+                    try
+                    {                                                
+                        RequestPost(postUrl2, postData);
+                    }
+                    catch (Exception ex)
+                    {
+                        postDatas.Add(postData);
+                    }
+                }
+                Thread.Sleep(3000);
+            }
         }
 
         readonly static DateTime UnixTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

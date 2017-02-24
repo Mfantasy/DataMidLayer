@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataMidLayer.Device;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -159,14 +160,19 @@ namespace DataMidLayer
         private void button1_Click(object sender, EventArgs e)
         {
             try
-            {
-                MessageBox.Show("1");
-                DataSubscribe.BeginSubscribe(sensors);
-                MessageBox.Show("2");
+            {                
+                DataSubscribe.BeginSubscribe(sensors);                
                 button1.Enabled = false;
                 Thread thMail = new Thread(SendMail);
                 thMail.IsBackground = true;
                 thMail.Start();
+                bool isCache = bool.Parse(ConfigurationManager.AppSettings["是否缓存"]);
+                if (isCache)
+                {
+                    Thread exPost = new Thread(PostS.QuePost);
+                    exPost.IsBackground = true;
+                    exPost.Start();
+                }                
             }
             catch (Exception ex)
             {

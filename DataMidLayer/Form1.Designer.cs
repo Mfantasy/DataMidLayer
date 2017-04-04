@@ -126,6 +126,7 @@
             this.button3.Text = "断线重连\r\n";
             this.button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Visible = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label5
@@ -137,6 +138,7 @@
             this.label5.Size = new System.Drawing.Size(113, 12);
             this.label5.TabIndex = 9;
             this.label5.Text = "超时判定时间(分钟)";
+            this.label5.Visible = false;
             // 
             // numericUpDown3
             // 
@@ -155,6 +157,7 @@
             0,
             0,
             0});
+            this.numericUpDown3.Visible = false;
             // 
             // label4
             // 
@@ -190,6 +193,7 @@
             0,
             0,
             0});
+            this.numericUpDown2.Visible = false;
             // 
             // label2
             // 
@@ -199,6 +203,7 @@
             this.label2.Size = new System.Drawing.Size(131, 12);
             this.label2.TabIndex = 4;
             this.label2.Text = "模拟转发频率(分钟/次)";
+            this.label2.Visible = false;
             // 
             // checkBox2
             // 
@@ -209,6 +214,7 @@
             this.checkBox2.TabIndex = 1;
             this.checkBox2.Text = "数据异常模拟转发";
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.Visible = false;
             // 
             // checkBox1
             // 
@@ -220,6 +226,7 @@
             this.checkBox1.TabIndex = 0;
             this.checkBox1.Text = "数据异常提醒邮件";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.Visible = false;
             // 
             // button1
             // 
@@ -237,7 +244,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
-            this.button2.Text = "单次模拟";
+            this.button2.Text = "测试连接";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -281,6 +288,7 @@
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
             this.设置ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
             this.设置ToolStripMenuItem.Text = "更新说明";
+            this.设置ToolStripMenuItem.Click += new System.EventHandler(this.设置ToolStripMenuItem_Click);
             // 
             // 获取异常设备列表邮件ToolStripMenuItem
             // 

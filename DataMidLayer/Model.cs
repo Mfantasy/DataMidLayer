@@ -80,6 +80,7 @@ namespace DataMidLayer
                 return mx;
             }
         }
+        public bool Connected { get; set; }
         public bool IsEx { get; set; }
         public string SiteWhereId { get; set; }
         public string Name { get; set; }

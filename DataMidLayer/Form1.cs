@@ -41,6 +41,26 @@ namespace DataMidLayer
             checkBox2.CheckedChanged += CheckBox2_CheckedChanged;
             numericUpDown2.ValueChanged += NumericUpDown2_ValueChanged;
             numericUpDown3.ValueChanged += NumericUpDown3_ValueChanged;
+            //监控线程
+            System.Windows.Forms.Timer tm = new System.Windows.Forms.Timer();
+            tm.Interval = 30 * 1000 * 60;//30分钟
+            tm.Tick += Tm_Tick;
+            tm.Start();
+        }
+
+        private void Tm_Tick(object sender, EventArgs e)
+        {
+            bool ex = sensors.Exists(ss => !ss.Connected);            
+            if (ex)
+            {
+                List<Sensor> sss = sensors.FindAll(ss => !ss.Connected);
+                foreach (Sensor item in sss)
+                {
+                    item.Log.Clear();
+                    item.Log.Add("未知原因断线重连");
+                    ThreadPool.QueueUserWorkItem((o) => DataSubscribe.StartSubscribe(item));
+                }
+            }
         }
 
         private void NumericUpDown3_ValueChanged(object sender, EventArgs e)
@@ -241,6 +261,8 @@ namespace DataMidLayer
             }
         }
 
+       
+
         private void button3_Click(object sender, EventArgs e)
         {
             //手动重连
@@ -263,6 +285,12 @@ namespace DataMidLayer
             }
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(title, body)));
             MessageBox.Show("邮件已发送,请注意查收");
+        }
+
+        private void 设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string ee = "增加了一个监控线程用来监控断线设备";
+            MessageBox.Show(ee);
         }
     }
 }

@@ -115,7 +115,9 @@
     <EmbeddedResource Include="ShowTable.resx">
       <DependentUpon>ShowTable.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Device\config.xml11" />
+    <Content Include="Device\config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -127,7 +129,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="M_ico.ico" />

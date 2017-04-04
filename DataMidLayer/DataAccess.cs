@@ -114,8 +114,8 @@ namespace DataMidLayer
                 ss.Error.Msg = ex.Message;
                 ss.Error.StactTrace = ex.StackTrace;
                 ss.ExCatched();
+                ss.Connected = false;
                 Thread.Sleep(10 * 1000);
-
                 ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj("[异常]数据转发", "发送订阅指令时异常\r\n" + ex.Message + "\r\n" + ex.StackTrace + "\r\n" + ss.Name)));
                 return;
             }
@@ -123,6 +123,7 @@ namespace DataMidLayer
             int i = 0;
             while (tcp.Connected)
             {
+                ss.Connected = true;
                 try
                 {
                     byte[] bufferR = new byte[1024 * 16]; int bfLength = 0;
@@ -195,6 +196,7 @@ namespace DataMidLayer
                     }
                 }
             }
+            ss.Connected = false;
         }
 
         public static void ReSubscribe(Sensor ss, int i)
@@ -217,6 +219,7 @@ namespace DataMidLayer
                 ss.Error.Msg = ex.Message;
                 ss.Error.StactTrace = ex.StackTrace;
                 ss.ExCatched();
+                ss.Connected = false;
                 Thread.Sleep(10 * 1000);
                 ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj("[异常]数据转发", "发送订阅指令时异常\r\n" + ex.Message + "\r\n" + ex.StackTrace + "\r\n" + ss.Name)));
                 return;
@@ -225,6 +228,7 @@ namespace DataMidLayer
             int j = 0;
             while (tcp.Connected)
             {
+                ss.Connected = true;
                 try
                 {
                     byte[] bufferR = new byte[1024 * 16]; int bfLength = 0;
@@ -298,6 +302,7 @@ namespace DataMidLayer
                     }
                 }
             }
+            ss.Connected = false;
         }
 
         public static void ExSubscribe(Sensor ss, int i)
@@ -320,6 +325,7 @@ namespace DataMidLayer
                 ss.Error.Msg = ex.Message;
                 ss.Error.StactTrace = ex.StackTrace;
                 ss.ExCatched();
+                ss.Connected = false;
                 Thread.Sleep(10 * 1000);
                 ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj("[异常]数据转发", "发送订阅指令时异常\r\n" + ex.Message + "\r\n" + ex.StackTrace + "\r\n" + ss.Name)));
                 return;
@@ -327,6 +333,7 @@ namespace DataMidLayer
 
             while (tcp.Connected)
             {
+                ss.Connected = true;
                 try
                 {
                     byte[] bufferR = new byte[1024 * 16]; int bfLength = 0;
@@ -384,9 +391,7 @@ namespace DataMidLayer
                     break;
                 }
             }
-
-
-
+            ss.Connected = false;
         }
     }
 }

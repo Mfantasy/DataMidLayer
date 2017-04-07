@@ -101,6 +101,7 @@ namespace DataMidLayer.Device
         }
 
         static List<string> postDatas = new List<string>();
+        static int times = 0;
         public static void QuePost()
         {
             //有个死循环,死循环不断去读错误列表,如果错误列表有项,那么就Req.Req失败了,休息5秒继续Req.
@@ -113,6 +114,8 @@ namespace DataMidLayer.Device
                     try
                     {                                                
                         RequestPost(postUrl2, postData);
+                        times++;
+                        Form1.HuanCun.GetCurrentParent().Invoke(new Action(() => Form1.HuanCun.Text = "缓存次数:"+times.ToString()));
                     }
                     catch (Exception ex)
                     {
@@ -162,6 +165,7 @@ namespace DataMidLayer.Device
                 request.CookieContainer = cookieContainer;
                 request.AllowAutoRedirect = true;
                 request.Method = "POST";
+                request.Timeout = 30 * 1000;
                 request.Headers.Add("Authorization", "Basic ZXRhZG1pbkBzaXRlOmFiY2QxMjM=");
                 request.ContentType = "application/json";
                 request.ContentLength = data.Length;

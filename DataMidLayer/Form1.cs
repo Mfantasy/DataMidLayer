@@ -19,9 +19,11 @@ namespace DataMidLayer
 {
     public partial class Form1 : Form
     {
+        public static ToolStripStatusLabel HuanCun; 
         public Form1()
         {
             InitializeComponent();
+            HuanCun = toolStripStatusLabel1;            
             //Load
             sensors = LoadConfig();
             //DataGridView Initial
@@ -36,11 +38,24 @@ namespace DataMidLayer
             dgvEX.RowHeadersVisible = false;
             //treeView
             BuildTree();
-            //事件绑定
-            checkBox1.CheckedChanged += CheckBox1_CheckedChanged;
-            checkBox2.CheckedChanged += CheckBox2_CheckedChanged;
-            numericUpDown2.ValueChanged += NumericUpDown2_ValueChanged;
-            numericUpDown3.ValueChanged += NumericUpDown3_ValueChanged;
+            System.Windows.Forms.Timer tm = new System.Windows.Forms.Timer();
+            tm.Interval = 30 * 1000 * 60; //30分钟
+            tm.Tick += Tm_Tick;
+            tm.Start();
+            ////事件绑定
+            //checkBox1.CheckedChanged += CheckBox1_CheckedChanged;
+            //checkBox2.CheckedChanged += CheckBox2_CheckedChanged;
+            //numericUpDown2.ValueChanged += NumericUpDown2_ValueChanged;
+            //numericUpDown3.ValueChanged += NumericUpDown3_ValueChanged;
+        }
+
+        private void Tm_Tick(object sender, EventArgs e)
+        {
+            List<Sensor> noWork = sensors.FindAll(ss => !ss.IsWorking);
+            foreach (var item in noWork)
+            {
+                ThreadPool.QueueUserWorkItem((o) => DataSubscribe.GetAndPost(item, "监测到离线设备,重新进入GAP方法", 0));
+            }
         }
 
         private void NumericUpDown3_ValueChanged(object sender, EventArgs e)
@@ -109,7 +124,7 @@ namespace DataMidLayer
                     s.Type = item.SelectSingleNode("model").InnerText;
                     s.SiteWhereId = item.SelectSingleNode("sitewhere").InnerText;
                     s.Config.Moni = bool.Parse(ConfigurationManager.AppSettings["是否模拟"]);
-                    s.Config.Remind = false;//bool.Parse(ConfigurationManager.AppSettings["是否提醒"]);
+                    //s.Config.Remind = false;//bool.Parse(ConfigurationManager.AppSettings["是否提醒"]);
                     s.Config.OverTimeM = int.Parse(ConfigurationManager.AppSettings["数据超时判定时间"]);
                     s.Config.MoniIntervalM = int.Parse(ConfigurationManager.AppSettings["数据模拟发送频率"]);
                     s.CatchEx += S_CatchEx;
@@ -133,25 +148,25 @@ namespace DataMidLayer
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
         {
             //Show异常列表
-            var show = new ShowTable(dgvEX);
-            show.ShowDialog();
-            foreach (int i in indexEX)
-            {
-                dgvEX.Rows[i].DefaultCellStyle.ForeColor = Color.Black;
-            }
-            indexEX.Clear();
-            labelEX.Text = "无新异常";
-            labelEX.ForeColor = Color.Black;
+            //var show = new ShowTable(dgvEX);
+            //show.ShowDialog();
+            //foreach (int i in indexEX)
+            //{
+            //    dgvEX.Rows[i].DefaultCellStyle.ForeColor = Color.Black;
+            //}
+            //indexEX.Clear();
+            //labelEX.Text = "无新异常";
+            //labelEX.ForeColor = Color.Black;
         }
 
         private void S_CatchEx(object sender, EventArgs e)
         {
-            Sensor ss = sender as Sensor;
+         //   Sensor ss = sender as Sensor;
             this.Invoke(new Action(() =>
             {
-                int i = dgvEX.Rows.Add(ss.Name, ss.Type, DateTime.Now, ss.Error.Msg, ss.Error.StactTrace);
-                dgvEX.Rows[i].DefaultCellStyle.ForeColor = Color.Red;
-                indexEX.Add(i);
+           //     int i = dgvEX.Rows.Add(ss.Name, ss.Type, DateTime.Now, ss.Error.Msg, ss.Error.StactTrace);
+             //   dgvEX.Rows[i].DefaultCellStyle.ForeColor = Color.Red;
+                indexEX.Add(1);//i
                 labelEX.ForeColor = Color.Red;
                 labelEX.Text = "异常(" + indexEX.Count.ToString() + ")";
             }));
@@ -194,7 +209,7 @@ namespace DataMidLayer
                 {
                     body += item.Name + "\t" + item.Addr + "\r\n";
                 }
-                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(title, body)));
+                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMail(title, body)));
             }
             
         }
@@ -245,9 +260,8 @@ namespace DataMidLayer
         {
             //手动重连
             try
-            {
-                sensor.Log.Clear();
-                ThreadPool.QueueUserWorkItem((o) => DataSubscribe.StartSubscribe(sensor));
+            {                
+                ThreadPool.QueueUserWorkItem((o) => DataSubscribe.GetAndPost(sensor,"手动重连",0));
             }
             catch(Exception ex) { MessageBox.Show(ex.Message); }
         } 
@@ -261,8 +275,14 @@ namespace DataMidLayer
             {
                 body += item.Name + "\t" + item.Addr + "\r\n";
             }
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj(title, body)));
+            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMail(title, body)));
             MessageBox.Show("邮件已发送,请注意查收");
+        }
+
+        private void 设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string comment = "重新规划数据处理逻辑,优化邮件";
+            MessageBox.Show(comment);
         }
     }
 }

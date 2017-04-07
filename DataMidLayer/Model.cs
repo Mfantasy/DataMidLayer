@@ -10,6 +10,8 @@ namespace DataMidLayer
 {
     public class Sensor
     {
+        public bool IsWorking { get; set; }
+
         public event EventHandler CatchEx;
         public void ExCatched()
         {
@@ -34,7 +36,7 @@ namespace DataMidLayer
         public ErrorStr error = new ErrorStr();
         public ErrorStr Error { get { return error; } set { error = value; } }
 
-        public List<string> log = new List<string>();
+        List<string> log = new List<string>();
         public List<string> Log { get { return log; } set { log = value; } }
 
         public MX SensorModel

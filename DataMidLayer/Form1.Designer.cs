@@ -51,6 +51,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.labelEX = new System.Windows.Forms.ToolStripStatusLabel();
             this.dcount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -281,6 +282,7 @@
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
             this.设置ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
             this.设置ToolStripMenuItem.Text = "更新说明";
+            this.设置ToolStripMenuItem.Click += new System.EventHandler(this.设置ToolStripMenuItem_Click);
             // 
             // 获取异常设备列表邮件ToolStripMenuItem
             // 
@@ -293,7 +295,8 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.labelEX,
-            this.dcount});
+            this.dcount,
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 539);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(842, 22);
@@ -313,6 +316,12 @@
             this.dcount.Name = "dcount";
             this.dcount.Size = new System.Drawing.Size(56, 17);
             this.dcount.Text = "设备数量";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(56, 17);
+            this.toolStripStatusLabel1.Text = "数据缓存";
             // 
             // Form1
             // 
@@ -369,6 +378,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ToolStripStatusLabel dcount;
         private System.Windows.Forms.ToolStripMenuItem 获取异常设备列表邮件ToolStripMenuItem;
+        public System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
 

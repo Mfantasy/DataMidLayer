@@ -11,7 +11,13 @@ namespace DataMidLayer.Device
 {
     class MXS1402:MX
     {
-    
+        public override int Interval
+        {
+            get
+            {
+                return 5 * 60 + AddRandom(50);
+            }
+        }
         private string soilTemperature;
 
         public string SoilTemperature
@@ -34,7 +40,7 @@ namespace DataMidLayer.Device
             PostS.PostToSW(ss.SiteWhereId, 1, SoilTemperature);
             PostS.PostToSW(ss.SiteWhereId, 2, SoilHumidity);
         }
-        public override void MoniPostData(Sensor ss)
+        public override void PostDataByXml(Sensor ss)
         {
             if (ss.XmlValues.Count == 2)
             {

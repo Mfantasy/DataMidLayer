@@ -72,18 +72,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
-    <Compile Include="Device\MX.cs" />
-    <Compile Include="Device\MX6100.cs" />
-    <Compile Include="Device\MX7200.cs" />
-    <Compile Include="Device\MX8000.cs" />
-    <Compile Include="Device\MX8100.cs" />
-    <Compile Include="Device\MX9000.cs" />
-    <Compile Include="Device\MXN880.cs" />
-    <Compile Include="Device\MXS1201.cs" />
-    <Compile Include="Device\MXS1204.cs" />
-    <Compile Include="Device\MXS1402.cs" />
-    <Compile Include="Device\MXS1501.cs" />
-    <Compile Include="Device\MXS5000.cs" />
+    <Compile Include="DeviceModel\MX.cs" />
+    <Compile Include="DeviceModel\MX6100.cs" />
+    <Compile Include="DeviceModel\MX7200.cs" />
+    <Compile Include="DeviceModel\MX8000.cs" />
+    <Compile Include="DeviceModel\MX8100.cs" />
+    <Compile Include="DeviceModel\MX9000.cs" />
+    <Compile Include="DeviceModel\MXS1201.cs" />
+    <Compile Include="DeviceModel\MXS1204.cs" />
+    <Compile Include="DeviceModel\MXS1402.cs" />
+    <Compile Include="DeviceModel\MXS1501.cs" />
+    <Compile Include="DeviceModel\MXS5000.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,6 +98,7 @@
     <Compile Include="ShowTable.Designer.cs">
       <DependentUpon>ShowTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -115,7 +115,7 @@
     <EmbeddedResource Include="ShowTable.resx">
       <DependentUpon>ShowTable.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Device\config.xml11" />
+    <None Include="DeviceModel\config.xml11" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -127,7 +127,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="M_ico.ico" />

@@ -11,7 +11,13 @@ namespace DataMidLayer.Device
 {
     class MXS1501:MX
     {
-       
+        public override int Interval
+        {
+            get
+            {
+                return 5 * 60 + AddRandom(50);
+            }
+        }
         private string light;
 
         public String Light
@@ -26,7 +32,7 @@ namespace DataMidLayer.Device
             PostS.PostToSW(ss.SiteWhereId, 1, Light);
         }
 
-        public override void MoniPostData(Sensor ss)
+        public override void PostDataByXml(Sensor ss)
         {
             PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[2]);           
         }

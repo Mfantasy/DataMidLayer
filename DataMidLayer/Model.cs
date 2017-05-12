@@ -1,6 +1,7 @@
 ﻿using DataMidLayer.Device;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,13 @@ namespace DataMidLayer
 {
     public class Sensor
     {
+        //EXProperties
         public bool IsWorking { get; set; }
+        public bool IsEx { get; set; }
+        public bool IsXmlPosting { get; set; }
+        public bool Remind { get; set; } //停止时间
+        public int OverTimeM { get; set; } //超时时间(分)        
+        public bool Moni { get; set; } //是否模拟数据
 
         public event EventHandler CatchEx;
         public void ExCatched()
@@ -18,24 +25,14 @@ namespace DataMidLayer
             CatchEx?.Invoke(this, null);
         }
 
-        public class Cfg
-        {
-            public bool Remind { get; set; } //停止时间
-            public int OverTimeM { get; set; } //超时时间(分)
-            public int MoniIntervalM { get; set; } //模拟发送频率(分)
-            public bool Moni { get; set; } //是否模拟数据
-         
-        }
+        //异常及错误日志处理
         public class ErrorStr
         {
             public string Msg { get; set; }
             public string StactTrace { get; set; }
-        }
-
-        //public 
+        }        
         public ErrorStr error = new ErrorStr();
         public ErrorStr Error { get { return error; } set { error = value; } }
-
         List<string> log = new List<string>();
         public List<string> Log { get { return log; } set { log = value; } }
 
@@ -56,10 +53,7 @@ namespace DataMidLayer
                         break;
                     case "MXS1204":
                         mx = new MXS1204();
-                        break;
-                    case "MXN880":
-                        mx = new MXN880();
-                        break;
+                        break;           
                     case "MX9000":
                         mx = new MX9000();
                         break;
@@ -82,27 +76,13 @@ namespace DataMidLayer
                 return mx;
             }
         }
-        public bool IsEx { get; set; }
+        
         public string SiteWhereId { get; set; }
         public string Name { get; set; }
         public string Gateway { get; set; }
         public string Node { get; set; }
-        public string Type { get; set; }
-        private Cfg config = new Cfg();
-        public Cfg Config
-        {
-            get { return config; }
-            set { config = value; }
-        }
-
-
-        public bool Priority { get; set; } //是否为关键设备
-
-        public string Feed
-        {
-            get { return "{ method: \"subscribe\", headers: undefined, resource: \"/fengxi/" + Gateway + "/" + Node + "/" + Type + "\", token: 0 }"; }
-        }
-
+        public string Type { get; set; }   
+      
         public List<string> XmlValues
         {
             get
@@ -160,13 +140,22 @@ namespace DataMidLayer
             }
         }
 
-        public string XmlApi { get { return "http://api." + Addr.Replace("http://","") + ".xml"; } }
+        string resourceAddr = ConfigurationManager.AppSettings["resource"];
+        public string Feed
+        {
+            get
+            {
+                return "{"+string.Format(" method: \"subscribe\", headers: undefined, resource: \"/{0}/{1}/{2}/{3}\", token: 0 ", resourceAddr, Gateway, Node, Type)+"}";                
+            }
+        }
+
+        public string XmlApi { get { return  Addr.Replace("http://", "http://api.") + ".xml"; } }
 
         public string Addr
         {
             get
             {
-                return "http://misty.smeshlink.com/fengxi/"+Gateway+"/"+Node+"/"+Type;
+                return string.Format("http://misty.smeshlink.com/{0}/{1}/{2}/{3}", resourceAddr,Gateway,Node,Type);                
             }
         }
 

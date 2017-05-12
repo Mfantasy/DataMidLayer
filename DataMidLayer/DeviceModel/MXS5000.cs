@@ -10,7 +10,14 @@ using static DataMidLayer.DataSubscribe;
 namespace DataMidLayer.Device
 {
     class MXS5000 : MX
-    {   
+    {
+        public override int Interval
+        {
+            get
+            {
+                return  55 + AddRandom(20);
+            }
+        }
         private string rain;
 
         public string Rain
@@ -64,7 +71,7 @@ namespace DataMidLayer.Device
             PostS.PostToSW(ss.SiteWhereId, 5, WindDirection);
         }
 
-        public override void MoniPostData(Sensor ss)
+        public override void PostDataByXml(Sensor ss)
         {
             if (ss.XmlValues.Count == 5)
             {

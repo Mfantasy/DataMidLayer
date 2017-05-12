@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DataMidLayer.Device;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -17,7 +18,6 @@ namespace DataMidLayer
 {
     static class DataAccess
     {
-
         public static object lockObj = new object();
         /// <summary>
         /// 发送邮件(此方法占用网络时间,需用开线程调用)
@@ -75,15 +75,9 @@ namespace DataMidLayer
                 ThreadPool.QueueUserWorkItem(new WaitCallback((o) => GetAndPost(item, "进入GetAndPost方法", 0)));
             }
         }
-        static void WriteError(string msg)
-        {
-            lock (obj)
-            {
-                File.AppendAllText("error.txt", msg);
-            }
-        }
+  
 
-        static object obj = new object();
+   
         static int exId = 0;
         public static void GetAndPost(Sensor ss, string log1, int times)
         {
@@ -99,7 +93,7 @@ namespace DataMidLayer
             {
                 tcp.Connect(ip, port);
                 stream = tcp.GetStream();
-                tcp.ReceiveTimeout = ss.Config.OverTimeM * 60 * 1000;
+                tcp.ReceiveTimeout = ss.OverTimeM * 60 * 1000;
                 byte[] cmd = Encoding.UTF8.GetBytes(ss.Feed);
                 stream.Write(cmd, 0, cmd.Length);
             }
@@ -111,7 +105,7 @@ namespace DataMidLayer
 
                 exId++;
                 string msg = string.Format("异常索引:{0}\r\n异常设备:{1}\r\n异常时间{2}\r\n异常名称:{3}\r\n异常备注:{4}\r\n", exId, ss.Name + " " + ss.Type, DateTime.Now, exGet.Message, "订阅异常");
-                WriteError(msg);
+                Utils.WriteError(msg);
 
                 ss.IsWorking = false;
                 if (tcp != null && tcp.Connected)
@@ -171,7 +165,7 @@ namespace DataMidLayer
 
                             exId++;
                             string msg = string.Format("异常索引:{0}\r\n异常设备:{1}\r\n异常时间{2}\r\n异常名称:{3}\r\n异常备注:{4}\r\n", exId, ss.Name + " " + ss.Type, DateTime.Now, exPost.Message, "Post异常");
-                            WriteError(msg);
+                            Utils.WriteError(msg);
 
                         }
                     }
@@ -181,12 +175,15 @@ namespace DataMidLayer
                         exId++;
                         string msg = string.Format("异常索引:{0}\r\n异常设备:{1}\r\n异常时间{2}\r\n异常名称:{3}\r\n异常备注:{4}\r\n", exId, ss.Name + " " + ss.Type, DateTime.Now, exM.Message, "连接异常");
 
-                        WriteError(msg);
+                        Utils.WriteError(msg);
 
                         if (exM.HResult == -2146232800) //特定超时异常
-                        {
-                            ss.Log.Add(DateTime.Now.ToString()+" 启动数据缓存线程");
-                            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => MoniPost(ss)));
+                        {                            
+                            if (!ss.IsXmlPosting)
+                            {
+                                ss.Log.Add(DateTime.Now.ToString() + " 启动PostByXmlData线程");
+                                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => PostByXml(ss)));
+                            }
                             ThreadPool.QueueUserWorkItem(new WaitCallback((o) => GetAndPost(ss,  "因为超时重新进入GetAndPost方法", times)));
                             if (tcp != null && tcp.Connected)
                             {
@@ -210,7 +207,7 @@ namespace DataMidLayer
             }
         }
 
-        public static void MoniPost(Sensor ss)
+        public static void PostByXml(Sensor ss)
         {
             //出现异常了,首先得再启动一个线程不断去接收,等待连接.等正常数据来了.ex = false.然后发个邮件通知
             //然后再启动一个模拟线程去给sw发送模拟数据.等ex=false.停.
@@ -218,300 +215,125 @@ namespace DataMidLayer
             {
                 try
                 {
-                    Thread.Sleep(ss.Config.MoniIntervalM * 60 * 1000);
-                    if (ss.Config.Moni)
+                    Thread.Sleep(ss.SensorModel.Interval * 1000);
+                    if (ss.Moni)
                     {
-                        ss.SensorModel.MoniPostData(ss);
+                        ss.SensorModel.PostDataByXml(ss);
                     }
                 }
                 catch { }
             }
-            ss.Log.Add(DateTime.Now.ToString() + "缓存结束");
-        }
+            ss.Log.Add(DateTime.Now.ToString() + "PostByXml结束");
+            ss.IsXmlPosting = false;
+        }            
+    }
 
-        public static void StartSubscribe(Sensor ss)
+    public static class PostS
+    {          
+        static int postExIndex = 0;
+        static string url = ConfigurationManager.AppSettings["url"];
+        public static void PostToSW(string deviceId, int index, string data)
         {
-            TcpClient tcp = new TcpClient();
-            NetworkStream streamToServer = null;
-            try
-            {
-                tcp.Connect(ConfigurationManager.AppSettings["ip"], Int32.Parse(ConfigurationManager.AppSettings["port"]));
-                //发送指令
-                streamToServer = tcp.GetStream();
-
-                tcp.ReceiveTimeout = ss.Config.OverTimeM * 60 * 1000;
-                //string command = "{ method: \"subscribe\", headers: undefined, resource: \"/fengxi/" + fengxiGateway + "\", token: 0 }";
-                string command = ss.Feed;
-                byte[] bufferS = Encoding.UTF8.GetBytes(command); //msg为发送的字符串 
-
-                streamToServer.Write(bufferS, 0, bufferS.Length);
-            }
-            catch (Exception ex)
-            {
-                ss.Error.Msg = ex.Message;
-                ss.Error.StactTrace = ex.StackTrace;
-                ss.ExCatched();
-                Thread.Sleep(10 * 1000);
-                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMail("[异常]数据转发", "发送订阅指令时异常\r\n" + ex.Message + "\r\n" + ex.StackTrace + "\r\n" + ss.Name)));
-                return;
-            }
-            ss.Log.Add("\t订阅实时数据成功\t" + DateTime.Now.ToString());
-            int i = 0;
-            while (tcp.Connected)
-            {
-                try
+            string postData = GetJson(deviceId, index.ToString(), data);
+             try
                 {
-                    byte[] bufferR = new byte[1024 * 16]; int bfLength = 0;
-                    bfLength = streamToServer.Read(bufferR, 0, bufferR.Length);
-                    string str = Encoding.UTF8.GetString(bufferR, 0, bfLength);
-                    if (str.EndsWith("\"name\":"))//处理数据包中断
-                    {
-                        byte[] bufferR0 = new byte[1024 * 16];
-                        int bfLength0 = streamToServer.Read(bufferR0, 0, bufferR0.Length);
-                        str += Encoding.UTF8.GetString(bufferR0, 0, bfLength0);
-                    }
-                    if (str.Length < 256)
-                        continue;
-                    try
-                    {
-                        JObject.Parse(str);
-                    }
-                    catch
-                    {
-                        continue;
-                    }
-                    try
-                    {
-                        ss.SensorModel.Post(str, ss);
-                    }
-                    catch (Exception pex)
-                    {
-                        ss.Error.Msg = pex.Message;
-                        ss.Error.StactTrace = pex.StackTrace;
-                        ss.ExCatched();
-                        //ss.Log.Add("siteWhere服务器异常" + DateTime.Now.ToString());
-                        //ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj("[异常]数据转发", "siteWhere服务器异常\r\n" + pex.Message + "\r\n" + pex.StackTrace + "\r\n" + ss.Name)));
-                        continue;
-                    }
-                    if (i == 0)
-                    {
-                        ss.Log.Add("\t首次post到siteWhere请求成功\t" + DateTime.Now.ToString());
-                        ss.Log.Add("\t次数:\t" + i.ToString() + "\t" + DateTime.Now.ToString());
-                    }
-                    i++;
-                    ss.Log[2] = "\t次数:\t" + i.ToString() + "\t" + DateTime.Now.ToString();
-                    ss.IsEx = false;
+                    RequestPost(url, postData);
                 }
                 catch (Exception ex)
                 {
-                    if (ex.HResult == -2146232800)
+                    string exMsg = string.Format("索引:{0}\r\n异常信息:{1}\r\n异常地址:{2}\r\n", postExIndex, ex.Message, url);
+                    postDatas.Add(postData);
+                    Utils.WriteError(exMsg, "enno异常列表.txt");
+                }                                                 
+        }
+
+        //数据缓存机制
+        static List<string> postDatas = new List<string>();
+        static int times = 0;
+        public static void QuePost()
+        {
+            //有个死循环,死循环不断去读错误列表,如果错误列表有项,那么就Req.Req失败了,休息5秒继续Req.
+            while (true)
+            {
+                if (postDatas.Count > 0)
+                {
+                    string postData = postDatas[0];
+                    postDatas.RemoveAt(0);
+                    try
                     {
-                        ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
-                        ss.IsEx = true;
-                        ss.Log.Add(ss.Name + "\t超时\t尝试重连 . . .," + DateTime.Now.ToString());
-                        ThreadPool.QueueUserWorkItem(new WaitCallback((o) => MoniPost(ss)));
-                        break;
+                        RequestPost(url, postData);                                                
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        //如果不是超时异常,那么重新订阅.                               
-                        ss.Error.Msg = ex.Message;
-                        ss.Error.StactTrace = ex.StackTrace;
-                        ss.ExCatched();
-                        Thread.Sleep(10 * 60 * 1000);
-                        ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ReSubscribe(ss, i)));
-                        ss.Log.Add("\t" + ex.Message + "\t" + DateTime.Now);
-                        break;
+                        postDatas.Add(postData);
                     }
                 }
+                Thread.Sleep(3000);
             }
         }
 
-        public static void ReSubscribe(Sensor ss, int i)
+
+        
+        readonly static DateTime UnixTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        private static Double ToUnixTimestamp(DateTime date)
         {
-            TcpClient tcp = new TcpClient();
-            NetworkStream streamToServer = null;
-            try
-            {
-                tcp.Connect(ConfigurationManager.AppSettings["ip"], Int32.Parse(ConfigurationManager.AppSettings["port"]));
-                //发送指令
-                streamToServer = tcp.GetStream();
-                tcp.ReceiveTimeout = ss.Config.OverTimeM * 60 * 1000;
-                string command = ss.Feed;
-                byte[] bufferS = Encoding.UTF8.GetBytes(command); //msg为发送的字符串 
-
-                streamToServer.Write(bufferS, 0, bufferS.Length);
-            }
-            catch (Exception ex)
-            {
-                ss.Error.Msg = ex.Message;
-                ss.Error.StactTrace = ex.StackTrace;
-                ss.ExCatched();
-                Thread.Sleep(10 * 1000);
-                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMail("[异常]数据转发", "发送订阅指令时异常\r\n" + ex.Message + "\r\n" + ex.StackTrace + "\r\n" + ss.Name)));
-                return;
-            }
-            ss.Log.Add("\t重连成功\t" + DateTime.Now.ToString());
-            int j = 0;
-            while (tcp.Connected)
-            {
-                try
-                {
-                    byte[] bufferR = new byte[1024 * 16]; int bfLength = 0;
-                    bfLength = streamToServer.Read(bufferR, 0, bufferR.Length);
-                    string str = Encoding.UTF8.GetString(bufferR, 0, bfLength);
-                    if (str.EndsWith("\"name\":"))//处理数据包中断
-                    {
-                        byte[] bufferR0 = new byte[1024 * 16];
-                        int bfLength0 = streamToServer.Read(bufferR0, 0, bufferR0.Length);
-                        str += Encoding.UTF8.GetString(bufferR0, 0, bfLength0);
-                    }
-                    if (str.Length < 256)
-                        continue;
-                    try
-                    {
-                        JObject.Parse(str);
-                    }
-                    catch
-                    {
-                        continue;
-                    }
-                    try
-                    {
-                        ss.SensorModel.Post(str, ss);
-                    }
-                    catch (Exception pex)
-                    {
-                        ss.Error.Msg = pex.Message;
-                        ss.Error.StactTrace = pex.StackTrace;
-                        ss.ExCatched();
-                        //ss.Log.Add("siteWhere服务器异常" + DateTime.Now.ToString());
-                        //ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj("[异常]数据转发", "siteWhere服务器异常\r\n" + pex.Message + "\r\n" + pex.StackTrace + "\r\n" + ss.Name)));
-                        continue;
-                    }
-                    if (j == 0)
-                    {
-                        ss.Log.Add("\t重连post到siteWhere请求成功\t" + DateTime.Now.ToString());
-                    }
-                    ss.IsEx = false;
-                    i++;
-                    j++;
-                    ss.Log[2] = "\t次数:\t" + i.ToString() + "\t" + DateTime.Now.ToString();
-                    ss.IsEx = false;
-                }
-                catch (Exception ex)
-                {
-                    try { tcp.Close(); } catch (Exception exx) { ss.Log.Add(exx.Message); }
-                    if (ex.HResult == -2146232800)
-                    {
-                        ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
-                        ss.IsEx = true;
-                        ss.Log.Add(ss.Name + "\t超时\t已尝试重连" + DateTime.Now.ToString());
-
-                        if (ss.Config.Remind)
-                        {
-                            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMail(ss.Name + "\t超时", ss.Addr)));
-                        }
-                        ThreadPool.QueueUserWorkItem(new WaitCallback((o) => MoniPost(ss)));
-
-                        break;
-                    }
-                    else
-                    {
-
-                        ss.Error.Msg = ex.Message;
-                        ss.Error.StactTrace = ex.StackTrace;
-                        ss.ExCatched();
-                        ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ReSubscribe(ss, i)));
-                        ss.Log.Add("\t" + ex.Message + "\t" + DateTime.Now + "\t尝试重连");
-                        break;
-                    }
-                }
-            }
+            if (date.Kind != DateTimeKind.Utc)
+                date = date.ToUniversalTime();
+            return (date - UnixTime).TotalMilliseconds;
+        }
+        public static string GetJson(string deviceId, string index, string data)
+        {
+            string time = ((long)ToUnixTimestamp(DateTime.Now)).ToString();
+            JObject jobj = new JObject();
+            jobj.Add("deviceId", deviceId);
+            jobj.Add("attributeIndex", index);
+            jobj.Add("attributeData", data);
+            jobj.Add("ingressTime", time);
+            jobj.Add("deviceTime", time);
+            jobj.Add("source", "");
+            return jobj.ToString();
         }
 
-        public static void ExSubscribe(Sensor ss, int i)
+        private static void RequestPost(string posturl, string postData)
         {
-            TcpClient tcp = new TcpClient();
-            tcp.ReceiveTimeout = ss.Config.OverTimeM * 60 * 1000;
-            NetworkStream streamToServer = null;
+            Stream outstream = null;
+            Stream instream = null;
+            StreamReader sr = null;
+            HttpWebResponse response = null;
+            HttpWebRequest request = null;
+            Encoding encoding = Encoding.UTF8;
+            byte[] data = encoding.GetBytes(postData);
+            // 准备请求...
             try
             {
-                tcp.Connect(ConfigurationManager.AppSettings["ip"], Int32.Parse(ConfigurationManager.AppSettings["port"]));
-                //发送指令
-                streamToServer = tcp.GetStream();
-                string command = ss.Feed;
-                byte[] bufferS = Encoding.UTF8.GetBytes(command); //msg为发送的字符串 
-
-                streamToServer.Write(bufferS, 0, bufferS.Length);
+                // 设置参数
+                request = WebRequest.Create(posturl) as HttpWebRequest;
+                CookieContainer cookieContainer = new CookieContainer();
+                request.CookieContainer = cookieContainer;
+                request.AllowAutoRedirect = true;
+                request.Method = "POST";
+                request.Timeout = 30 * 1000;
+                request.Headers.Add("Authorization", "Basic ZXRhZG1pbkBzaXRlOmFiY2QxMjM=");
+                request.ContentType = "application/json";
+                request.ContentLength = data.Length;
+                outstream = request.GetRequestStream();
+                outstream.Write(data, 0, data.Length);
+                outstream.Close();
+                //发送请求并获取相应回应数据                
+                response = request.GetResponse() as HttpWebResponse;
+                ////直到request.GetResponse()程序才开始向目标网页发送Post请求
+                instream = response.GetResponseStream();
+                sr = new StreamReader(instream, encoding);
+                ////返回结果网页（html）代码
+                string content = sr.ReadToEnd();
+                ////string err = string.Empty;
+                ////HttpContext.Current.Response.Write(content);
+                //Console.WriteLine(content);
             }
             catch (Exception ex)
             {
-                ss.Error.Msg = ex.Message;
-                ss.Error.StactTrace = ex.StackTrace;
-                ss.ExCatched();
-                Thread.Sleep(10 * 1000);
-                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMail("[异常]数据转发", "发送订阅指令时异常\r\n" + ex.Message + "\r\n" + ex.StackTrace + "\r\n" + ss.Name)));
-                return;
+                throw ex;
             }
-
-            while (tcp.Connected)
-            {
-                try
-                {
-                    byte[] bufferR = new byte[1024 * 16]; int bfLength = 0;
-                    bfLength = streamToServer.Read(bufferR, 0, bufferR.Length);
-                    string str = Encoding.UTF8.GetString(bufferR, 0, bfLength);
-                    if (str.EndsWith("\"name\":"))//处理数据包中断
-                    {
-                        byte[] bufferR0 = new byte[1024 * 16];
-                        int bfLength0 = streamToServer.Read(bufferR0, 0, bufferR0.Length);
-                        str += Encoding.UTF8.GetString(bufferR0, 0, bfLength0);
-                    }
-                    if (str.Length < 256)
-                        continue;
-                    try
-                    {
-                        JObject.Parse(str);
-                    }
-                    catch
-                    {
-                        continue;
-                    }
-                    try
-                    {
-                        ss.SensorModel.Post(str, ss);
-                    }
-                    catch (Exception pex)
-                    {
-                        ss.Error.Msg = pex.Message;
-                        ss.Error.StactTrace = pex.StackTrace;
-                        ss.ExCatched();
-                        // ss.Log.Add("siteWhere服务器异常" + DateTime.Now.ToString());
-                        //ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMailUseZj("[异常]数据转发", "siteWhere服务器异常\r\n" + pex.Message + "\r\n" + pex.StackTrace + "\r\n" + ss.Name)));
-                        continue;
-                    }
-                    ss.IsEx = false;
-                    ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ReSubscribe(ss, i)));
-                    ss.Log.Add("\t转发已恢复正常\t" + DateTime.Now.ToString());
-                    break;
-
-                }
-                catch (Exception ex)
-                {
-                    try { tcp.Close(); } catch (Exception exx) { ss.Log.Add(exx.Message); }
-                    //ss.Error.Msg = ex.Message;
-                    //ss.Error.StactTrace = ex.StackTrace;
-                    //ss.ExCatched();
-                    //Thread.Sleep(10 * 60 * 1000);
-                    ThreadPool.QueueUserWorkItem(new WaitCallback((o) => ExSubscribe(ss, i)));
-
-                    break;
-                }
-            }
-
-
-
         }
     }
 }

@@ -221,7 +221,7 @@ namespace DataMidLayer
             //然后再启动一个模拟线程去给sw发送模拟数据.等ex=false.停.
             if (ss.SensorModel is MXS5000)
             {
-                DataAccess.SendMail(+"数据超时", "", "mengfantong@smeshlink.com");
+                DataAccess.SendMail(ss.Name+"数据超时", "", "mengfantong@smeshlink.com");
             }
             while (ss.IsEx)
             {
@@ -237,7 +237,7 @@ namespace DataMidLayer
             }
             ss.Log.Add(DateTime.Now.ToString() + "PostByXml结束");
             ss.IsXmlPosting = false;
-            DataAccess.SendMail("气象站数据超时", "", "mengfantong@smeshlink.com");
+            DataAccess.SendMail(ss.Name+"数据恢复", "", "mengfantong@smeshlink.com");
         }            
     }
 

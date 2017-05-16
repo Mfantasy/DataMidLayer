@@ -237,7 +237,10 @@ namespace DataMidLayer
             }
             ss.Log.Add(DateTime.Now.ToString() + "PostByXml结束");
             ss.IsXmlPosting = false;
-            DataAccess.SendMail(ss.Name+"数据恢复", "", "mengfantong@smeshlink.com");
+            if (ss.SensorModel is MXS5000)
+            {
+                DataAccess.SendMail(ss.Name + "数据恢复", "", "mengfantong@smeshlink.com");
+            }
         }            
     }
 

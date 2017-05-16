@@ -16,7 +16,10 @@ namespace DataMidLayer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Form1 fm1 = new Form1();
+            Fm1 = fm1;
+            Application.Run(fm1);
         }
+        public static Form1 Fm1 { get; set; }
     }
 }

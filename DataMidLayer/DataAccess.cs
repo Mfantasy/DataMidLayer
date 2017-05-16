@@ -23,13 +23,20 @@ namespace DataMidLayer
         /// 发送邮件(此方法占用网络时间,需用开线程调用)
         /// 需配置
         /// </summary>                
-        public static void SendMail(string title, string body)
+        public static void SendMail(string title, string body, string rec="")
         {
             MailAddress EmailFrom = new MailAddress(ConfigurationManager.AppSettings["发件人地址"], ConfigurationManager.AppSettings["发件人昵称"]);
             MailMessage mailMsg = new MailMessage();
             mailMsg.From = EmailFrom;
             string receivers = ConfigurationManager.AppSettings["邮件接收人"];
-            mailMsg.To.Add(receivers);
+            if (rec == "")
+            {
+                mailMsg.To.Add(receivers);
+            }
+            else
+            {
+                mailMsg.To.Add(rec);
+            }
             mailMsg.Subject = title;
             mailMsg.Body = body;
             SmtpClient spClient = new SmtpClient(ConfigurationManager.AppSettings["发件服务器"]);
@@ -172,6 +179,7 @@ namespace DataMidLayer
                     catch (Exception exM)
                     {
                         ss.IsEx = true;
+                        ss.ExCatched();
                         exId++;
                         string msg = string.Format("异常索引:{0}\r\n异常设备:{1}\r\n异常时间{2}\r\n异常名称:{3}\r\n异常备注:{4}\r\n", exId, ss.Name + " " + ss.Type, DateTime.Now, exM.Message, "连接异常");
 
@@ -211,6 +219,10 @@ namespace DataMidLayer
         {
             //出现异常了,首先得再启动一个线程不断去接收,等待连接.等正常数据来了.ex = false.然后发个邮件通知
             //然后再启动一个模拟线程去给sw发送模拟数据.等ex=false.停.
+            if (ss.SensorModel is MXS5000)
+            {
+                DataAccess.SendMail(+"数据超时", "", "mengfantong@smeshlink.com");
+            }
             while (ss.IsEx)
             {
                 try
@@ -225,6 +237,7 @@ namespace DataMidLayer
             }
             ss.Log.Add(DateTime.Now.ToString() + "PostByXml结束");
             ss.IsXmlPosting = false;
+            DataAccess.SendMail("气象站数据超时", "", "mengfantong@smeshlink.com");
         }            
     }
 
@@ -235,16 +248,17 @@ namespace DataMidLayer
         public static void PostToSW(string deviceId, int index, string data)
         {
             string postData = GetJson(deviceId, index.ToString(), data);
-             try
-                {
-                    RequestPost(url, postData);
-                }
-                catch (Exception ex)
-                {
-                    string exMsg = string.Format("索引:{0}\r\n异常信息:{1}\r\n异常地址:{2}\r\n", postExIndex, ex.Message, url);
-                    postDatas.Add(postData);
-                    Utils.WriteError(exMsg, "enno异常列表.txt");
-                }                                                 
+            try
+            {
+                RequestPost(url, postData);
+            }
+            catch (Exception ex)
+            {
+                postExIndex++;
+                string exMsg = string.Format("索引:{0}\r\n异常信息:{1}\r\n异常地址:{2}\r\n异常时间:{3}", postExIndex, ex.Message, url,DateTime.Now);
+                postDatas.Add(postData);
+                Utils.WriteError(exMsg, "enno异常列表.txt");
+            }                                    
         }
 
         //数据缓存机制
@@ -261,7 +275,9 @@ namespace DataMidLayer
                     postDatas.RemoveAt(0);
                     try
                     {
-                        RequestPost(url, postData);                                                
+                        RequestPost(url, postData);
+                        times ++;
+                        Program.Fm1.Invoke(new Action(() => Program.Fm1.toolStripStatusLabel1.Text ="缓存次数" + times.ToString() + " 最新时间" +DateTime.Now.ToString()));
                     }
                     catch (Exception ex)
                     {

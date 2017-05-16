@@ -197,7 +197,7 @@
             this.labelEX.Name = "labelEX";
             this.labelEX.Size = new System.Drawing.Size(44, 17);
             this.labelEX.Text = "无异常";
-            this.labelEX.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
+
             // 
             // dcount
             // 

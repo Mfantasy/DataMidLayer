@@ -149,7 +149,7 @@ namespace DataMidLayer
             }
         }
 
-        public string XmlApi { get { return  Addr.Replace("http://", "http://api.") + ".xml"; } }
+        public string XmlApi { get { return  Addr.Replace("http://misty.", "http://api.") + ".xml"; } }
 
         public string Addr
         {

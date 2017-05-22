@@ -143,7 +143,9 @@ namespace DataMidLayer
 
 
         void SendMail()
-        {                                    
+        {
+            while (true)
+            {
                 Thread.Sleep(24 * 60 * 60 * 1000);
                 List<Sensor> exSensors = sensors.FindAll(ss => ss.IsEx);
                 string title = "沣西海绵城市设备状态提醒";
@@ -152,7 +154,8 @@ namespace DataMidLayer
                 {
                     body += item.Name + "\t" + item.Addr + "\r\n";
                 }
-                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMail(title, body)));                        
+                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMail(title, body)));
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)

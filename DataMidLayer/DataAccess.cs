@@ -189,7 +189,7 @@ namespace DataMidLayer
                         {
                             if (ss.SensorModel is MXS5000 && isMain)
                             {
-                                DataAccess.SendMail(ss.Name + "数据超时", "", "mengfantong@smeshlink.com");
+                                DataAccess.SendMail(ss.Name.Remove(4) + "超时", "", "mengfantong@smeshlink.com");
                             }
                             if (!ss.IsXmlPosting)
                             {
@@ -239,9 +239,9 @@ namespace DataMidLayer
             }
             ss.Log.Add(DateTime.Now.ToString() + "PostByXml结束");
             ss.IsXmlPosting = false;
-            if (ss.SensorModel is MXS5000)
+            if (ss.SensorModel is MXS5000 && isMain)
             {
-                DataAccess.SendMail(ss.Name + "数据恢复", "", "mengfantong@smeshlink.com");
+                DataAccess.SendMail(ss.Name.Remove(4) + "恢复", "", "mengfantong@smeshlink.com");
             }
         }            
     }

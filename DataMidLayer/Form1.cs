@@ -19,7 +19,18 @@ namespace DataMidLayer
 {
     public partial class Form1 : Form
     {
-        
+
+        //2.监控 数据时间间隔 .  
+        //分档 20分钟不变的前提下, 处理3分钟时间差
+        //
+
+        //3.出现问题, 计算结束 数据 与 最新数据之间间隔差 / 3分钟一条 = 应弥补的次数
+        // 数值 = 无数个0.2 / 0.4随机分布, 首先分布0.2 然后计算是否足够 , 如果不够则随机补0.4,
+
+        //4.重构数据, 除了rain,剩下与第一条数据完全相同. then begin to post
+
+
+
         List<Sensor> sensors;
         List<int> indexEX = new List<int>();
         public Form1()
@@ -52,9 +63,9 @@ namespace DataMidLayer
             {
                 DataSubscribe.BeginSubscribe(sensors);
                 button1.Enabled = false;
-                Thread thMail = new Thread(SendMail);
-                thMail.IsBackground = true;
-                thMail.Start();
+                //Thread thMail = new Thread(SendMail);
+                //thMail.IsBackground = true;
+                //thMail.Start();
                 //缓存
                 Thread exPost = new Thread(PostS.QuePost);
                 exPost.IsBackground = true;

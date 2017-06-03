@@ -40,6 +40,8 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.获取异常设备列表邮件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.气象站数据中断监测ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.打开ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.labelEX = new System.Windows.Forms.ToolStripStatusLabel();
             this.dcount = new System.Windows.Forms.ToolStripStatusLabel();
@@ -165,7 +167,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.获取异常设备列表邮件ToolStripMenuItem});
+            this.获取异常设备列表邮件ToolStripMenuItem,
+            this.气象站数据中断监测ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(842, 25);
@@ -178,6 +181,21 @@
             this.获取异常设备列表邮件ToolStripMenuItem.Size = new System.Drawing.Size(116, 21);
             this.获取异常设备列表邮件ToolStripMenuItem.Text = "获取设备状态邮件";
             this.获取异常设备列表邮件ToolStripMenuItem.Click += new System.EventHandler(this.获取异常设备列表邮件ToolStripMenuItem_Click);
+            // 
+            // 气象站数据中断监测ToolStripMenuItem
+            // 
+            this.气象站数据中断监测ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.打开ToolStripMenuItem});
+            this.气象站数据中断监测ToolStripMenuItem.Name = "气象站数据中断监测ToolStripMenuItem";
+            this.气象站数据中断监测ToolStripMenuItem.Size = new System.Drawing.Size(128, 21);
+            this.气象站数据中断监测ToolStripMenuItem.Text = "气象站数据中断监测";
+            // 
+            // 打开ToolStripMenuItem
+            // 
+            this.打开ToolStripMenuItem.Name = "打开ToolStripMenuItem";
+            this.打开ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.打开ToolStripMenuItem.Text = "打开";
+            this.打开ToolStripMenuItem.Click += new System.EventHandler(this.打开ToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -197,7 +215,6 @@
             this.labelEX.Name = "labelEX";
             this.labelEX.Size = new System.Drawing.Size(44, 17);
             this.labelEX.Text = "无异常";
-
             // 
             // dcount
             // 
@@ -257,6 +274,8 @@
         private System.Windows.Forms.ToolStripStatusLabel dcount;
         private System.Windows.Forms.ToolStripMenuItem 获取异常设备列表邮件ToolStripMenuItem;
         public System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripMenuItem 气象站数据中断监测ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 打开ToolStripMenuItem;
     }
 }
 

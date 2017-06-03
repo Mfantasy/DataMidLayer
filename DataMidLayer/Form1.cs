@@ -19,18 +19,7 @@ namespace DataMidLayer
 {
     public partial class Form1 : Form
     {
-
-        //2.监控 数据时间间隔 .  
-        //分档 20分钟不变的前提下, 处理3分钟时间差
-        //
-
-        //3.出现问题, 计算结束 数据 与 最新数据之间间隔差 / 3分钟一条 = 应弥补的次数
-        // 数值 = 无数个0.2 / 0.4随机分布, 首先分布0.2 然后计算是否足够 , 如果不够则随机补0.4,
-
-        //4.重构数据, 除了rain,剩下与第一条数据完全相同. then begin to post
-
-
-
+     
         List<Sensor> sensors;
         List<int> indexEX = new List<int>();
         public Form1()
@@ -192,7 +181,8 @@ namespace DataMidLayer
                 {
                     
                     linkLabel1.Text = sensor.Addr;
-                    string s1 = string.Format("{0}\r\n状态:{1}\r\n更新时间:\r\n{2}", sensor.Data.XmlData.Name, sensor.data.XmlData.Status, DateTime.Parse(sensor.data.XmlData.TimeStr));
+                    sensor.RefreshXmlData();
+                    string s1 = string.Format("{0}\r\n状态:{1}\r\n更新时间:\r\n{2}", sensor.XmlTitle, sensor.XmlStatus, DateTime.Parse(sensor.XmlTime));
                     string s2 = "";
                     foreach (string item in sensor.Current)
                     {
@@ -229,6 +219,84 @@ namespace DataMidLayer
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMail(title, body)));
             MessageBox.Show("邮件已发送,请注意查收");
         }
-       
+
+
+
+        void MonitorData(Sensor sensor)
+        {
+            double lastRain = -1;
+            DateTime lastTime;
+            while (true)
+            {
+                string rain = null;
+                if (sensor.XmlValues.Count == 5)
+                {
+                    rain = sensor.XmlValues[0];
+                }
+                else
+                {
+                    rain = sensor.XmlValues[1];
+                }
+                if (string.IsNullOrWhiteSpace(rain))
+                {
+                    continue;
+                }
+                //初始化初始数据
+                if (lastRain == -1) 
+                {
+                    lastRain = Math.Round(lastRain, 1); //0.2mm
+                    lastTime = DateTime.Parse(sensor.XmlTime);
+                }
+                
+
+
+                Thread.Sleep(3 * 60 * 1000);
+            }
+            
+        }
+
+        private void 打开ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //2.监控 数据时间间隔 .  
+            //  如果在监控时间内下雨了, 则进行步骤3,否则进行步骤4
+
+            //3.出现问题, 计算结束 数据 与 最新数据之间间隔差 / 3分钟一条 = 应弥补的次数
+            // 数值 = 无数个0.2 / 0.4随机分布, 首先分布0.2 然后计算是否足够 , 如果不够则随机补0.4,
+
+            //4.重构数据, 除了rain,剩下与第一条数据完全相同. then begin to post
+
+            //实行计划
+            //1.多线程不停访问接口.
+            if (打开ToolStripMenuItem.Checked)
+            {
+                打开ToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                打开ToolStripMenuItem.Checked = true;
+            }
+
+            List<Sensor> mxs5000List = sensors.FindAll(s => s.SensorModel is MXS5000);
+            foreach (Sensor mxs5000 in mxs5000List)
+            {
+                DateTime dt;
+                //MessageBox.Show(DateTime.Parse(mxs5000.Data.XmlData.TimeStr).ToString());                
+            }
+        }
+        string Sub(string str)
+        {
+            double result = 0;
+            bool ok = double.TryParse(str, out result);
+            if (ok)
+            {
+                return result.ToString("0.0");
+            }
+            else
+            {
+                return str;
+            }
+        }
+
+
     }
 }

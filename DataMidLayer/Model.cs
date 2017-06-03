@@ -88,20 +88,10 @@ namespace DataMidLayer
             get
             {
                 List<string> current = new List<string>();
-                if (data != null)
+                foreach (var item in Data.XmlData.ChildRen)
                 {
-                    foreach (var item in data.XmlData.ChildRen)
-                    {
-                        current.Add(item.Current.Value);
-                    }
-                }
-                else
-                {
-                    foreach (var item in Data.XmlData.ChildRen)
-                    {
-                        current.Add(item.Current.Value);
-                    }
-                }
+                    current.Add(item.Current.Value);
+                }                
                 return current;
             }
         }
@@ -129,13 +119,14 @@ namespace DataMidLayer
             }
         }
 
-        public XmlRoot data;
+        XmlRoot data;
 
         public XmlRoot Data
         {
             get
             {
-                data = DataAccess.SerializeXml<XmlRoot>(DataAccess.HttpGet(XmlApi));
+                if (data == null)
+                { data = DataAccess.SerializeXml<XmlRoot>(DataAccess.HttpGet(XmlApi)); }
                 return data;
             }
         }
@@ -163,6 +154,11 @@ namespace DataMidLayer
         {
             return this.Name;
         }
+
+        public void RefreshXmlData() { data = DataAccess.SerializeXml<XmlRoot>(DataAccess.HttpGet(XmlApi)); }
+        public string XmlTitle { get { return data.XmlData.Name; } }
+        public string XmlStatus { get { return data.XmlData.Status; } }
+        public string XmlTime { get { return data.XmlData.TimeStr; } }
     }
 
     [XmlRoot("xfml")]

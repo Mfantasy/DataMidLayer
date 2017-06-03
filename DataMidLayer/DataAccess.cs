@@ -225,17 +225,18 @@ namespace DataMidLayer
         {
             //出现异常了,首先得再启动一个线程不断去接收,等待连接.等正常数据来了.ex = false.然后发个邮件通知
             //然后再启动一个模拟线程去给sw发送模拟数据.等ex=false.停.           
+            ss.RefreshXmlData();
             while (ss.IsEx)
             {
                 try
-                {
-                    Thread.Sleep(ss.SensorModel.Interval * 1000);
+                {                    
                     if (ss.Moni)
                     {
                         ss.SensorModel.PostDataByXml(ss);
                     }
+                    Thread.Sleep(ss.SensorModel.Interval * 1000);
                 }
-                catch { }
+                catch { }                
             }
             ss.Log.Add(DateTime.Now.ToString() + "PostByXml结束");
             ss.IsXmlPosting = false;

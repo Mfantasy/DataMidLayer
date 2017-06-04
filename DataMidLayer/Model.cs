@@ -156,9 +156,14 @@ namespace DataMidLayer
         }
 
         public void RefreshXmlData() { data = DataAccess.SerializeXml<XmlRoot>(DataAccess.HttpGet(XmlApi)); }
-        public string XmlTitle { get { return data.XmlData.Name; } }
-        public string XmlStatus { get { return data.XmlData.Status; } }
-        public string XmlTime { get { return data.XmlData.TimeStr; } }
+        public string XmlTitle { get { return Data.XmlData.Name; } }
+        public string XmlStatus { get { return Data.XmlData.Status; } }
+        public string XmlTime { get { return Data.XmlData.TimeStr; } }
+
+        public bool StatusByXml { get; set; }
+        public int TimesByXml { get; set; }
+
+
     }
 
     [XmlRoot("xfml")]

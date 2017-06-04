@@ -76,14 +76,14 @@ namespace DataMidLayer
                 {
                     TreeNode node = new TreeNode(item.Name);
                     node.Tag = item;                    
-                    treeView1.Nodes[item.Type].Nodes.Add(node);
+                    tV1.Nodes[item.Type].Nodes.Add(node);
                 }
                 else
                 {
                     types.Add(item.Type);
                     TreeNode nd = new TreeNode(item.Type);
                     nd.Name = item.Type;
-                    treeView1.Nodes.Add(nd);
+                    tV1.Nodes.Add(nd);
                     TreeNode node = new TreeNode(item.Name);
                     nd.Nodes.Add(node);
                     node.Tag = item;
@@ -171,7 +171,7 @@ namespace DataMidLayer
         }
         Sensor sensor;
         
-        private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void tV1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             TreeNode node = e.Node;
             if (node.Tag != null)
@@ -220,15 +220,15 @@ namespace DataMidLayer
             MessageBox.Show("邮件已发送,请注意查收");
         }
 
-
-
-        void MonitorData(Sensor sensor)
+        void MonitorData(Object obj)
         {
+            Sensor sensor = obj as Sensor;
             double lastRain = -1;
-            DateTime lastTime;
+            DateTime lastTime = DateTime.MinValue;
             while (true)
             {
                 string rain = null;
+                sensor.RefreshXmlData();
                 if (sensor.XmlValues.Count == 5)
                 {
                     rain = sensor.XmlValues[0];
@@ -244,59 +244,143 @@ namespace DataMidLayer
                 //初始化初始数据
                 if (lastRain == -1) 
                 {
-                    lastRain = Math.Round(lastRain, 1); //0.2mm
+                    lastRain = Math.Round(double.Parse(rain), 1); //0.2mm
                     lastTime = DateTime.Parse(sensor.XmlTime);
+                    sensor.StatusByXml = true;
+                    sensor.TimesByXml = 0;
                 }
-                
-
-
+                //开始工作流程
+                else
+                {
+                    if (lastTime != DateTime.Parse(sensor.XmlTime))
+                    {                  
+                        //说明没有数据中断,判断设备当前状态,如果处于异常状态,则说明此时设备数据已恢复正常,进行计算处理
+                        if (!sensor.StatusByXml)
+                        {
+                            //计算
+                            CalAndPost(sensor,lastRain,double.Parse(rain),lastTime);
+                        }
+                        //更新雨量,更新时间,更新状态,更新次数
+                        sensor.StatusByXml = true;
+                        sensor.TimesByXml = 0;
+                        lastRain = Math.Round(double.Parse(rain), 1);
+                        lastTime = DateTime.Parse(sensor.XmlTime);
+                    }
+                    else
+                    {
+                        //说明设备3分钟内没有进行数据上行,数据中断,将设备状态false,times+1
+                        sensor.StatusByXml = false;
+                        sensor.TimesByXml++;
+                    }
+                }
                 Thread.Sleep(3 * 60 * 1000);
             }
-            
+
         }
 
-        private void 打开ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CalAndPost(Sensor sensor, double lastRain, double rain,DateTime lastTime)
         {
-            //2.监控 数据时间间隔 .  
-            //  如果在监控时间内下雨了, 则进行步骤3,否则进行步骤4
-
-            //3.出现问题, 计算结束 数据 与 最新数据之间间隔差 / 3分钟一条 = 应弥补的次数
-            // 数值 = 无数个0.2 / 0.4随机分布, 首先分布0.2 然后计算是否足够 , 如果不够则随机补0.4,
-
-            //4.重构数据, 除了rain,剩下与第一条数据完全相同. then begin to post
-
-            //实行计划
-            //1.多线程不停访问接口.
-            if (打开ToolStripMenuItem.Checked)
+            //计算具体逻辑.0.2为基准量
+            //1.取增量 . 2.根据增量与基数0.2计算出应该补充的0.2的数量, 然后将数量与次数做比较,
+            //如果少于0.2的数量少于需要post的次数,那么做随机分布算法. 如果数量多于次数, 那么取多出的次数,然后先次数0.2,再随机分布新0.2
+            //3.循环,Post
+            double rAdd = rain - lastRain;
+            int countBase = (int)(rAdd / 0.2);
+            DateTime tempTime = lastTime;
+            //如果base为0,说明没下雨,自动补
+            if (countBase == 0)
             {
-                打开ToolStripMenuItem.Checked = false;
+                for (int i = 0; i < sensor.TimesByXml; i++)
+                {
+                    tempTime = tempTime.AddMinutes(3);
+                    (sensor.SensorModel as MXS5000).PostByXml(sensor, rain.ToString("0.0"), tempTime);
+                }                                
             }
             else
             {
-                打开ToolStripMenuItem.Checked = true;
+                //下雨了,判断base和time谁多
+                int countTemp = sensor.TimesByXml - countBase;
+                double rainTemp = lastRain;
+                if (countTemp > 0)
+                {
+                    //次数多,随机分布0.2   
+                    List<int> tiChu = GetTiChuRandomNum(sensor.TimesByXml,countTemp);
+                    for (int i = 0; i < sensor.TimesByXml; i++)
+                    {
+                        tempTime = tempTime.AddMinutes(3);
+                        if (!tiChu.Contains(i))
+                        {
+                            rainTemp = rainTemp + 0.2;
+                        }                                                                      
+                        (sensor.SensorModel as MXS5000).PostByXml(sensor, rainTemp.ToString("0.0"), tempTime);
+                    }
+                }
+                else if (countTemp == 0)
+                {
+                    for (int i = 0; i < sensor.TimesByXml; i++)
+                    {
+                        tempTime = tempTime.AddMinutes(3);
+                        rainTemp = rainTemp + 0.2;
+                        (sensor.SensorModel as MXS5000).PostByXml(sensor, rainTemp.ToString("0.0"), tempTime);
+                    }
+                }
+                else if (countTemp < 0)
+                {
+                    List<int> add = GetTiChuRandomNum(sensor.TimesByXml, countTemp * -1);
+                    for (int i = 0; i < sensor.TimesByXml; i++)
+                    {
+                        tempTime = tempTime.AddMinutes(3);
+                        rainTemp = rainTemp + 0.2;
+                        if (add.Contains(i))
+                        {
+                            rainTemp = rainTemp + 0.2;
+                        }
+                        (sensor.SensorModel as MXS5000).PostByXml(sensor, rainTemp.ToString("0.0"), tempTime);
+                    }
+                }
             }
+        }
+
+        private List<int> GetTiChuRandomNum(int timesByXml, int countTemp)
+        {
+            //随机剔除
+            List<int> l = new List<int>();
+            Random r = new Random();
+            for (int i = 0; i < countTemp; i++)
+            {
+                int num = r.Next(0, timesByXml);
+                while (l.Contains(num))
+                {
+                    num = r.Next(0, timesByXml);
+                }
+                l.Add(num);
+            }
+            return l;
+        }
+
+        //一.根据XML判定设备超时具体思路
+        //情景.
+        //1.如果两次访问数据时间不相同,说明数据没有中断,不做处理. ----- 如果此时sensor状态为false 跳入处理方案2.
+        //2.如果两次访问数据时间相同, 说明数据已经中断3分钟,此时应该跳入处理方案1.
+        //处理方案
+        //1.sensor状态false,times+1 . 记录雨量
+        //2.sensor状态true,统计次数 . 计算雨量  跳入处理方案3
+        //3.传入雨量及次数 , 做循环,并加入时间的计算.然后封包然后post
+        //关于时间计算    最新数据之间间隔差 / 3分钟一条 = 应弥补的次数
+        // 数值 = 无数个0.2 / 0.4随机分布, 首先分布0.2 然后计算是否足够 , 如果不够则随机补0.4,
+
+        private void 打开ToolStripMenuItem_Click(object sender, EventArgs e)
+        {                                                                                                                                            
+            打开ToolStripMenuItem.Checked = true;
+            打开ToolStripMenuItem.Enabled = false;
 
             List<Sensor> mxs5000List = sensors.FindAll(s => s.SensorModel is MXS5000);
             foreach (Sensor mxs5000 in mxs5000List)
             {
-                DateTime dt;
-                //MessageBox.Show(DateTime.Parse(mxs5000.Data.XmlData.TimeStr).ToString());                
+                Thread thm = new Thread(MonitorData);
+                thm.IsBackground = true;
+                thm.Start();                
             }
         }
-        string Sub(string str)
-        {
-            double result = 0;
-            bool ok = double.TryParse(str, out result);
-            if (ok)
-            {
-                return result.ToString("0.0");
-            }
-            else
-            {
-                return str;
-            }
-        }
-
-
     }
 }

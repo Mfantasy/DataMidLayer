@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.tV1 = new System.Windows.Forms.TreeView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -55,15 +55,15 @@
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // treeView1
+            // tV1
             // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.Location = new System.Drawing.Point(0, 0);
-            this.treeView1.Margin = new System.Windows.Forms.Padding(0);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(252, 511);
-            this.treeView1.TabIndex = 0;
-            this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
+            this.tV1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tV1.Location = new System.Drawing.Point(0, 0);
+            this.tV1.Margin = new System.Windows.Forms.Padding(0);
+            this.tV1.Name = "tV1";
+            this.tV1.Size = new System.Drawing.Size(252, 511);
+            this.tV1.TabIndex = 0;
+            this.tV1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tV1_NodeMouseClick);
             // 
             // splitContainer1
             // 
@@ -75,7 +75,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.treeView1);
+            this.splitContainer1.Panel1.Controls.Add(this.tV1);
             // 
             // splitContainer1.Panel2
             // 
@@ -193,7 +193,7 @@
             // 打开ToolStripMenuItem
             // 
             this.打开ToolStripMenuItem.Name = "打开ToolStripMenuItem";
-            this.打开ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.打开ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.打开ToolStripMenuItem.Text = "打开";
             this.打开ToolStripMenuItem.Click += new System.EventHandler(this.打开ToolStripMenuItem_Click);
             // 
@@ -259,7 +259,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.TreeView tV1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.StatusStrip statusStrip1;

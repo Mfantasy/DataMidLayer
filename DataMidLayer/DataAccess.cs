@@ -267,6 +267,23 @@ namespace DataMidLayer
             }                                    
         }
 
+        public static void PostToSW(string deviceId, int index, string data,DateTime dtime)
+        {
+            string time = ((long)ToUnixTimestamp(dtime)).ToString();
+            string postData = GetJson(deviceId, index.ToString(), data,time);
+            try
+            {
+                RequestPost(url, postData);
+            }
+            catch (Exception ex)
+            {
+                postExIndex++;
+                string exMsg = string.Format("索引:{0}\r\n异常信息:{1}\r\n异常地址:{2}\r\n记录时间:{3}", postExIndex, ex.Message, url, dtime);
+                postDatas.Add(postData);
+                Utils.WriteError(exMsg, "enno异常列表(气象站数据补录).txt");
+            }
+        }
+
         //数据缓存机制
         static List<string> postDatas = new List<string>();
         static int times = 0;
@@ -306,6 +323,18 @@ namespace DataMidLayer
         public static string GetJson(string deviceId, string index, string data)
         {
             string time = ((long)ToUnixTimestamp(DateTime.Now)).ToString();
+            JObject jobj = new JObject();
+            jobj.Add("deviceId", deviceId);
+            jobj.Add("attributeIndex", index);
+            jobj.Add("attributeData", data);
+            jobj.Add("ingressTime", time);
+            jobj.Add("deviceTime", time);
+            jobj.Add("source", "");
+            return jobj.ToString();
+        }
+
+        public static string GetJson(string deviceId, string index, string data, string time)
+        {
             JObject jobj = new JObject();
             jobj.Add("deviceId", deviceId);
             jobj.Add("attributeIndex", index);

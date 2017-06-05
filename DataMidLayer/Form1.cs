@@ -256,9 +256,16 @@ namespace DataMidLayer
                     {                  
                         //说明没有数据中断,判断设备当前状态,如果处于异常状态,则说明此时设备数据已恢复正常,进行计算处理
                         if (!sensor.StatusByXml)
-                        {
+                        {                          
                             //计算
-                            CalAndPost(sensor,lastRain,double.Parse(rain),lastTime);
+                            try
+                            {                              
+                                CalAndPost(sensor, lastRain, double.Parse(rain), lastTime);
+                            }
+                            catch (Exception ex)
+                            {
+                                Utils.WriteError(ex.Message+"\r\n"+DateTime.Now+"\r\n", "气象站数据补传异常CAP.txt");
+                            }                            
                         }
                         //更新雨量,更新时间,更新状态,更新次数
                         sensor.StatusByXml = true;
@@ -279,7 +286,7 @@ namespace DataMidLayer
         }
 
         private void CalAndPost(Sensor sensor, double lastRain, double rain,DateTime lastTime)
-        {
+        {                   
             //计算具体逻辑.0.2为基准量
             //1.取增量 . 2.根据增量与基数0.2计算出应该补充的0.2的数量, 然后将数量与次数做比较,
             //如果少于0.2的数量少于需要post的次数,那么做随机分布算法. 如果数量多于次数, 那么取多出的次数,然后先次数0.2,再随机分布新0.2
@@ -287,14 +294,34 @@ namespace DataMidLayer
             double rAdd = rain - lastRain;
             int countBase = (int)(rAdd / 0.2);
             DateTime tempTime = lastTime;
+
+            //首先得对翻斗值做特殊处理
+            //先判断是否翻斗,然后再判断是否是正常翻斗
+            if (rAdd < 0)
+            {
+                if (lastRain > 25.6)
+                {
+                    DataAccess.SendMail("雨量数据值25.6!!!",sensor.Name);
+                    return;
+                }                
+
+                if ((25.6 - lastRain) < 3) //误差在3mm之内皆为正常范围
+                {
+                    
+                }
+                else //超出误差处理范围,抛弃lastRain进行计算
+                {
+
+                }
+            }
             //如果base为0,说明没下雨,自动补
-            if (countBase == 0)
+            else if (countBase == 0)
             {
                 for (int i = 0; i < sensor.TimesByXml; i++)
                 {
                     tempTime = tempTime.AddMinutes(3);
                     (sensor.SensorModel as MXS5000).PostByXml(sensor, rain.ToString("0.0"), tempTime);
-                }                                
+                }
             }
             else
             {
@@ -304,14 +331,14 @@ namespace DataMidLayer
                 if (countTemp > 0)
                 {
                     //次数多,随机分布0.2   
-                    List<int> tiChu = GetTiChuRandomNum(sensor.TimesByXml,countTemp);
+                    List<int> tiChu = GetTiChuRandomNum(sensor.TimesByXml, countTemp);
                     for (int i = 0; i < sensor.TimesByXml; i++)
                     {
                         tempTime = tempTime.AddMinutes(3);
                         if (!tiChu.Contains(i))
                         {
                             rainTemp = rainTemp + 0.2;
-                        }                                                                      
+                        }
                         (sensor.SensorModel as MXS5000).PostByXml(sensor, rainTemp.ToString("0.0"), tempTime);
                     }
                 }
@@ -379,7 +406,7 @@ namespace DataMidLayer
             {
                 Thread thm = new Thread(MonitorData);
                 thm.IsBackground = true;
-                thm.Start();                
+                thm.Start(mxs5000);                
             }
         }
     }

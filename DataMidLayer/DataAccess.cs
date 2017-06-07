@@ -187,7 +187,7 @@ namespace DataMidLayer
 
                         if (exM.HResult == -2146232800) //特定超时异常
                         {
-                            if (ss.SensorModel is MXS5000 && isMain)
+                            if (ss.SensorModel is MXS5000)
                             {
                                 DataAccess.SendMail(ss.Name.Remove(4) + "超时", "", "mengfantong@smeshlink.com");
                             }
@@ -220,7 +220,7 @@ namespace DataMidLayer
             }
         }
 
-        static bool isMain = ConfigurationManager.AppSettings["url"] == "http://hm-iot.chinacloudapp.cn:80/api/deviceEvents";
+        //static bool isMain = ConfigurationManager.AppSettings["url"] == "http://hm-iot.chinacloudapp.cn:80/api/deviceEvents";
         public static void PostByXml(Sensor ss)
         {
             //出现异常了,首先得再启动一个线程不断去接收,等待连接.等正常数据来了.ex = false.然后发个邮件通知
@@ -230,7 +230,7 @@ namespace DataMidLayer
             {
                 try
                 {                    
-                    if (ss.Moni)
+                    if (ss.Moni && !(ss.SensorModel is MXS5000))
                     {
                         ss.SensorModel.PostDataByXml(ss);
                     }
@@ -240,7 +240,7 @@ namespace DataMidLayer
             }
             ss.Log.Add(DateTime.Now.ToString() + "PostByXml结束");
             ss.IsXmlPosting = false;
-            if (ss.SensorModel is MXS5000 && isMain)
+            if (ss.SensorModel is MXS5000)
             {
                 DataAccess.SendMail(ss.Name.Remove(4) + "恢复", "", "mengfantong@smeshlink.com");
             }
@@ -364,7 +364,15 @@ namespace DataMidLayer
                 request.AllowAutoRedirect = true;
                 request.Method = "POST";
                 request.Timeout = 30 * 1000;
-                request.Headers.Add("Authorization", "Basic ZXRhZG1pbkBzaXRlOmFiY2QxMjM=");
+                string city = ConfigurationManager.AppSettings["resource"];
+                if (city == "fengxi")
+                {
+                    request.Headers.Add("Authorization", "Basic ZXRhZG1pbkBzaXRlOmFiY2QxMjM=");
+                }
+                else
+                {
+                    request.Headers.Add("Authorization", "Basic ZGF0YUFjY2Vzc0BiYWljaGVuZy5jb206ZGExMjM0NQ==");
+                }
                 request.ContentType = "application/json";
                 request.ContentLength = data.Length;
                 outstream = request.GetRequestStream();

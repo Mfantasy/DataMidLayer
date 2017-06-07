@@ -93,6 +93,7 @@ namespace DataMidLayer.Device
 
         public void PostByXml(Sensor ss, string rain,DateTime dt)
         {
+            Console.WriteLine("postbyxml");
             if (ss.XmlValues.Count == 5)
             {
                 PostS.PostToSW(ss.SiteWhereId, 1, rain, dt);
@@ -109,6 +110,7 @@ namespace DataMidLayer.Device
                 PostS.PostToSW(ss.SiteWhereId, 2, ss.XmlValues[4], dt);
                 PostS.PostToSW(ss.SiteWhereId, 3, ss.XmlValues[5], dt);
             }
+            Console.WriteLine("pok");
         }
        
     }

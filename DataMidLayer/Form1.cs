@@ -25,7 +25,18 @@ namespace DataMidLayer
         public Form1()
         {
             InitializeComponent();
-        
+            if (ConfigurationManager.AppSettings["resource"] == "fengxi")
+            {
+                this.Text = "沣西海绵数据转发";
+            }
+            else if (ConfigurationManager.AppSettings["resource"]=="baichengcity")
+            {
+                this.Text = "白城海绵数据转发";
+            }
+            else
+            {
+                this.Text = "null";
+            }
             //Load
             sensors = LoadConfig();       
             //treeView
@@ -229,6 +240,8 @@ namespace DataMidLayer
             {
                 string rain = null;
                 sensor.RefreshXmlData();
+                Console.WriteLine("数据刷新时间{0}",DateTime.Now);
+                //判断feed中有没有port
                 if (sensor.XmlValues.Count == 5)
                 {
                     rain = sensor.XmlValues[0];
@@ -248,18 +261,21 @@ namespace DataMidLayer
                     lastTime = DateTime.Parse(sensor.XmlTime);
                     sensor.StatusByXml = true;
                     sensor.TimesByXml = 0;
+                    Console.WriteLine("初始化数据结束");
                 }
                 //开始工作流程
                 else
                 {
                     if (lastTime != DateTime.Parse(sensor.XmlTime))
-                    {                  
+                    {
                         //说明没有数据中断,判断设备当前状态,如果处于异常状态,则说明此时设备数据已恢复正常,进行计算处理
+                        Console.WriteLine("数据正常");
                         if (!sensor.StatusByXml)
                         {                          
                             //计算
                             try
-                            {                              
+                            {
+                                Console.WriteLine("重算及转发");                        
                                 CalAndPost(sensor, lastRain, double.Parse(rain), lastTime);
                             }
                             catch (Exception ex)
@@ -275,9 +291,11 @@ namespace DataMidLayer
                     }
                     else
                     {
+                        
                         //说明设备3分钟内没有进行数据上行,数据中断,将设备状态false,times+1
                         sensor.StatusByXml = false;
                         sensor.TimesByXml++;
+                        Console.WriteLine("数据异常{0}",sensor.TimesByXml);
                     }
                 }
                 Thread.Sleep(3 * 60 * 1000);
@@ -299,20 +317,21 @@ namespace DataMidLayer
             //先判断是否翻斗,然后再判断是否是正常翻斗
             if (rAdd < 0)
             {
-                if (lastRain > 25.6)
+                if (lastRain > 25.4)
                 {
-                    DataAccess.SendMail("雨量数据值25.6!!!",sensor.Name);
+                    DataAccess.SendMail("雨量数据值超过25.4!!!",sensor.Name);
                     return;
                 }                
 
-                if ((25.6 - lastRain) < 3) //误差在3mm之内皆为正常范围
+                if ((25.4 - lastRain) < 2) //误差在2mm之内皆为正常范围
                 {
-                    
+                    rAdd = 25.4 - lastRain + rain;                    
                 }
                 else //超出误差处理范围,抛弃lastRain进行计算
                 {
-
+                    rAdd = rain;                    
                 }
+                countBase = (int)(rAdd / 0.2);
             }
             //如果base为0,说明没下雨,自动补
             else if (countBase == 0)
@@ -338,6 +357,10 @@ namespace DataMidLayer
                         if (!tiChu.Contains(i))
                         {
                             rainTemp = rainTemp + 0.2;
+                            if (rainTemp >= 25.6)
+                            {
+                                rainTemp = 0;
+                            }
                         }
                         (sensor.SensorModel as MXS5000).PostByXml(sensor, rainTemp.ToString("0.0"), tempTime);
                     }
@@ -348,6 +371,10 @@ namespace DataMidLayer
                     {
                         tempTime = tempTime.AddMinutes(3);
                         rainTemp = rainTemp + 0.2;
+                        if (rainTemp >= 25.6)
+                        {
+                            rainTemp = 0;
+                        }
                         (sensor.SensorModel as MXS5000).PostByXml(sensor, rainTemp.ToString("0.0"), tempTime);
                     }
                 }
@@ -361,6 +388,10 @@ namespace DataMidLayer
                         if (add.Contains(i))
                         {
                             rainTemp = rainTemp + 0.2;
+                        }
+                        if (rainTemp >= 25.6)
+                        {
+                            rainTemp = 0;
                         }
                         (sensor.SensorModel as MXS5000).PostByXml(sensor, rainTemp.ToString("0.0"), tempTime);
                     }

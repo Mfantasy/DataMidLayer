@@ -161,7 +161,7 @@ namespace DataMidLayer
         public string XmlTime { get { return Data.XmlData.TimeStr; } }
 
         public bool StatusByXml { get; set; }
-        public int TimesByXml { get; set; }
+        
 
 
     }

@@ -92,25 +92,23 @@ namespace DataMidLayer.Device
         }
 
         public void PostByXml(Sensor ss, string rain,DateTime dt)
-        {
-            Console.WriteLine("postbyxml");
+        {            
             if (ss.XmlValues.Count == 5)
             {
                 PostS.PostToSW(ss.SiteWhereId, 1, rain, dt);
-                PostS.PostToSW(ss.SiteWhereId, 4, ss.XmlValues[1], dt);
-                PostS.PostToSW(ss.SiteWhereId, 5, ss.XmlValues[2], dt);
-                PostS.PostToSW(ss.SiteWhereId, 2, ss.XmlValues[3], dt);
-                PostS.PostToSW(ss.SiteWhereId, 3, ss.XmlValues[4], dt);
+                //PostS.PostToSW(ss.SiteWhereId, 4, ss.XmlValues[1], dt);
+                //PostS.PostToSW(ss.SiteWhereId, 5, ss.XmlValues[2], dt);
+                //PostS.PostToSW(ss.SiteWhereId, 2, ss.XmlValues[3], dt);
+                //PostS.PostToSW(ss.SiteWhereId, 3, ss.XmlValues[4], dt);
             }
             else
             {
                 PostS.PostToSW(ss.SiteWhereId, 1, rain, dt);
-                PostS.PostToSW(ss.SiteWhereId, 4, ss.XmlValues[2], dt);
-                PostS.PostToSW(ss.SiteWhereId, 5, ss.XmlValues[3], dt);
-                PostS.PostToSW(ss.SiteWhereId, 2, ss.XmlValues[4], dt);
-                PostS.PostToSW(ss.SiteWhereId, 3, ss.XmlValues[5], dt);
-            }
-            Console.WriteLine("pok");
+                //PostS.PostToSW(ss.SiteWhereId, 4, ss.XmlValues[2], dt);
+                //PostS.PostToSW(ss.SiteWhereId, 5, ss.XmlValues[3], dt);
+                //PostS.PostToSW(ss.SiteWhereId, 2, ss.XmlValues[4], dt);
+                //PostS.PostToSW(ss.SiteWhereId, 3, ss.XmlValues[5], dt);
+            }         
         }
        
     }

@@ -52,7 +52,7 @@ namespace DataMidLayer
             {
                 lock (lockObj)
                 {
-                    File.AppendAllText("error.txt", ex.Message + "\r\n发送邮件失败\r\n" + title + "\r\n" + body + "\r\n" + DateTime.Now.ToString());
+                    File.AppendAllText("error.txt", "{"+ex.Message + "\r\n发送邮件失败\r\n" + title +  "\r\n" + DateTime.Now.ToString()+"}");
                 }
             }
         }
@@ -82,9 +82,24 @@ namespace DataMidLayer
                 ThreadPool.QueueUserWorkItem(new WaitCallback((o) => GetAndPost(item, "进入GetAndPost方法", 0)));
             }
         }
-  
 
-   
+        public static byte[] ReadFully(Stream stream)
+        {
+            // 初始化一个32k的缓存
+            byte[] buffer = new byte[32768];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                while (true)
+                {
+                    int read = stream.Read(buffer, 0, buffer.Length);
+                    if (read <= 0)
+                        return ms.ToArray();
+                    ms.Write(buffer, 0, read);
+                }
+            }
+        }
+
+
         static int exId = 0;
         public static void GetAndPost(Sensor ss, string log1, int times)
         {
@@ -130,16 +145,18 @@ namespace DataMidLayer
                 {
                     try
                     {
-                        byte[] bytes = new byte[1024 * 4];
-                        int l = stream.Read(bytes, 0, bytes.Length);
-                        string jstr = Encoding.UTF8.GetString(bytes, 0, l);
-                        if (jstr.EndsWith("\"name\":"))//数据包中断
-                        {
-                            byte[] byteAdd = new byte[1024 * 4];
-                            int ladd = stream.Read(byteAdd, 0, byteAdd.Length);
-                            jstr += Encoding.UTF8.GetString(byteAdd, 0, ladd);
-                        }
-                        if (jstr.Length < 128)
+                        byte[] bytes = ReadFully(stream);
+                        string jstr = Encoding.UTF8.GetString(bytes);
+                        //byte[] bytes = new byte[1024 * 4];
+                        //int l = stream.Read(bytes, 0, bytes.Length);
+                        //string jstr = Encoding.UTF8.GetString(bytes, 0, l);
+                        //if (jstr.EndsWith("\"name\":"))//数据包中断
+                        //{
+                        //    byte[] byteAdd = new byte[1024 * 4];
+                        //    int ladd = stream.Read(byteAdd, 0, byteAdd.Length);
+                        //    jstr += Encoding.UTF8.GetString(byteAdd, 0, ladd);
+                        //}
+                        if (jstr.Length < 64)
                         {
                             if (ini == 0)
                             {
@@ -156,9 +173,9 @@ namespace DataMidLayer
                             Thread.Sleep(3 * 1000);
                             return;
                         }
-                        try  //json格式校验
-                        { JObject.Parse(jstr); }
-                        catch { ss.Log.Add("json解析失败 " + DateTime.Now.ToString()); continue; }
+                        //try  //json格式校验
+                        //{ JObject.Parse(jstr); }
+                        //catch { ss.Log.Add("json解析失败 " + DateTime.Now.ToString()); continue; }
                         try  //Post
                         {
                             ss.SensorModel.Post(jstr, ss);
@@ -169,7 +186,6 @@ namespace DataMidLayer
                         catch (Exception exPost)
                         {
                             ss.ExCatched();
-
                             exId++;
                             string msg = string.Format("异常索引:{0}\r\n异常设备:{1}\r\n异常时间{2}\r\n异常名称:{3}\r\n异常备注:{4}\r\n", exId, ss.Name + " " + ss.Type, DateTime.Now, exPost.Message, "Post异常");
                             Utils.WriteError(msg);
@@ -225,7 +241,7 @@ namespace DataMidLayer
         {
             //出现异常了,首先得再启动一个线程不断去接收,等待连接.等正常数据来了.ex = false.然后发个邮件通知
             //然后再启动一个模拟线程去给sw发送模拟数据.等ex=false.停.           
-            ss.RefreshXmlData();
+            try { ss.RefreshXmlData(); } catch(Exception ex) { Utils.WriteError(ex.Message + DateTime.Now); }
             while (ss.IsEx)
             {
                 try

@@ -154,7 +154,7 @@ namespace DataMidLayer
                             int ladd = stream.Read(byteAdd, 0, byteAdd.Length);
                             jstr += Encoding.UTF8.GetString(byteAdd, 0, ladd);
                         }
-                        if (jstr.Length < 64)
+                        if (jstr.Length < 128)
                         {
                             if (ini == 0)
                             {

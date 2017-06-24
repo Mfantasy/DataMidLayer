@@ -145,17 +145,15 @@ namespace DataMidLayer
                 {
                     try
                     {
-                        byte[] bytes = ReadFully(stream);
-                        string jstr = Encoding.UTF8.GetString(bytes);
-                        //byte[] bytes = new byte[1024 * 4];
-                        //int l = stream.Read(bytes, 0, bytes.Length);
-                        //string jstr = Encoding.UTF8.GetString(bytes, 0, l);
-                        //if (jstr.EndsWith("\"name\":"))//数据包中断
-                        //{
-                        //    byte[] byteAdd = new byte[1024 * 4];
-                        //    int ladd = stream.Read(byteAdd, 0, byteAdd.Length);
-                        //    jstr += Encoding.UTF8.GetString(byteAdd, 0, ladd);
-                        //}
+                        byte[] bytes = new byte[1024 * 4];
+                        int l = stream.Read(bytes, 0, bytes.Length);
+                        string jstr = Encoding.UTF8.GetString(bytes, 0, l);
+                        if (jstr.EndsWith("\"name\":"))//数据包中断
+                        {
+                            byte[] byteAdd = new byte[1024 * 4];
+                            int ladd = stream.Read(byteAdd, 0, byteAdd.Length);
+                            jstr += Encoding.UTF8.GetString(byteAdd, 0, ladd);
+                        }
                         if (jstr.Length < 64)
                         {
                             if (ini == 0)
@@ -173,9 +171,9 @@ namespace DataMidLayer
                             Thread.Sleep(3 * 1000);
                             return;
                         }
-                        //try  //json格式校验
-                        //{ JObject.Parse(jstr); }
-                        //catch { ss.Log.Add("json解析失败 " + DateTime.Now.ToString()); continue; }
+                        try  //json格式校验
+                        { JObject.Parse(jstr); }
+                        catch { ss.Log.Add("json解析失败 " + DateTime.Now.ToString()); continue; }
                         try  //Post
                         {
                             ss.SensorModel.Post(jstr, ss);

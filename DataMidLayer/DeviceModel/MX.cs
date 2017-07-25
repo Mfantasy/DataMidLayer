@@ -7,12 +7,18 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
-namespace DataMidLayer.Device
+namespace DataMidLayer.DeviceModel
 {
     public abstract class MX
     {
-        //频率波动(s)
-        public abstract int Interval { get; }
+        //频率波动(s)        
+        public virtual int Interval
+        {
+            get
+            {
+                return 5 * 60 + AddRandom(100);
+            }
+        }
         Random r = new Random();
         protected int AddRandom(int range)
         {

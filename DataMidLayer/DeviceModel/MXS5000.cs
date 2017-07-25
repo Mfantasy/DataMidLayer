@@ -7,7 +7,7 @@ using System.Xml;
 using Newtonsoft.Json.Linq;
 using static DataMidLayer.DataSubscribe;
 
-namespace DataMidLayer.Device
+namespace DataMidLayer.DeviceModel
 {
     class MXS5000 : MX
     {
@@ -59,11 +59,22 @@ namespace DataMidLayer.Device
 
         protected override void PostData(JObject jobj, Sensor ss)
         {
-            Rain = jobj["body"]["children"][2]["data"][0]["value"].ToString();
-            WindDirection = jobj["body"]["children"][4]["data"][0]["value"].ToString();
-            WindSpeed = jobj["body"]["children"][3]["data"][0]["value"].ToString();
-            Temperature = jobj["body"]["children"][7]["data"][0]["value"].ToString();
-            Humidity = jobj["body"]["children"][8]["data"][0]["value"].ToString();
+            if (jobj["body"]["children"].Count() == 5)
+            {
+                Rain = jobj["body"]["children"][0]["data"][0]["value"].ToString();
+                WindDirection = jobj["body"]["children"][2]["data"][0]["value"].ToString();
+                WindSpeed = jobj["body"]["children"][1]["data"][0]["value"].ToString();
+                Temperature = jobj["body"]["children"][3]["data"][0]["value"].ToString();
+                Humidity = jobj["body"]["children"][4]["data"][0]["value"].ToString();
+            }
+            else
+            {
+                Rain = jobj["body"]["children"][2]["data"][0]["value"].ToString();
+                WindDirection = jobj["body"]["children"][4]["data"][0]["value"].ToString();
+                WindSpeed = jobj["body"]["children"][3]["data"][0]["value"].ToString();
+                Temperature = jobj["body"]["children"][7]["data"][0]["value"].ToString();
+                Humidity = jobj["body"]["children"][8]["data"][0]["value"].ToString();
+            }
             PostS.PostToSW(ss.SiteWhereId, 1, Rain);
             PostS.PostToSW(ss.SiteWhereId, 2, Temperature);
             PostS.PostToSW(ss.SiteWhereId, 3, Humidity);

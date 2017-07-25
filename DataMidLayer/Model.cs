@@ -1,4 +1,4 @@
-﻿using DataMidLayer.Device;
+﻿using DataMidLayer.DeviceModel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -72,6 +72,22 @@ namespace DataMidLayer
                     case "MX8100":
                         mx = new MX8100();
                         break;
+                    case "MX6300":
+                        mx = new MX6300();
+                        break;
+                    case "MX6400":
+                        mx = new MX6400();
+                        break;
+                    case "MX8300":
+                        mx = new MX8300();
+                        break;
+                    case "MX9100":
+                        mx = new MX9100();
+                        break;
+                    case "MX9110":
+                        mx = new MX9110();
+                        break;
+
                 }
                 return mx;
             }

@@ -1,28 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
-using Newtonsoft.Json.Linq;
-using DataMidLayer;
-using static DataMidLayer.DataSubscribe;
 
 namespace DataMidLayer.DeviceModel
 {
-    /// <summary>
-    /// 水采
-    /// </summary>
-    class MX6100:MX
+    class MX8300:MX
     {
-        public override int Interval
-        {
-            get
-            {
-                return 15 * 60 + AddRandom(100);
-            }
-        }
-
         private string status;
 
         public string Status
@@ -38,8 +24,8 @@ namespace DataMidLayer.DeviceModel
 
         protected override void PostData(JObject jobj, Sensor ss)
         {
-           Status = jobj["body"]["children"][1]["data"][0]["value"].ToString();
-           PostS.PostToSW(ss.SiteWhereId, 1, Status);
+            Status = jobj["body"]["children"][1]["data"][0]["value"].ToString();
+            PostS.PostToSW(ss.SiteWhereId, 1, Status);
         }
     }
 }

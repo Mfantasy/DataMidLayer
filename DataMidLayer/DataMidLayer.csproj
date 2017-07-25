@@ -74,10 +74,15 @@
     <Compile Include="DataAccess.cs" />
     <Compile Include="DeviceModel\MX.cs" />
     <Compile Include="DeviceModel\MX6100.cs" />
+    <Compile Include="DeviceModel\MX6300.cs" />
+    <Compile Include="DeviceModel\MX6400.cs" />
     <Compile Include="DeviceModel\MX7200.cs" />
     <Compile Include="DeviceModel\MX8000.cs" />
     <Compile Include="DeviceModel\MX8100.cs" />
+    <Compile Include="DeviceModel\MX8300.cs" />
     <Compile Include="DeviceModel\MX9000.cs" />
+    <Compile Include="DeviceModel\MX9100.cs" />
+    <Compile Include="DeviceModel\MX9110.cs" />
     <Compile Include="DeviceModel\MXS1201.cs" />
     <Compile Include="DeviceModel\MXS1204.cs" />
     <Compile Include="DeviceModel\MXS1402.cs" />
@@ -132,6 +137,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DeviceModel\config.xml" />
     <Content Include="M_ico.ico" />
   </ItemGroup>
   <ItemGroup>

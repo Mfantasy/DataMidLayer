@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using static DataMidLayer.DataSubscribe;
 
-namespace DataMidLayer.Device
+namespace DataMidLayer.DeviceModel
 {
     class MX8100 : MX
     {

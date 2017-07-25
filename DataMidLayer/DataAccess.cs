@@ -1,4 +1,4 @@
-﻿using DataMidLayer.Device;
+﻿using DataMidLayer.DeviceModel;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -274,6 +274,7 @@ namespace DataMidLayer
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 postExIndex++;
                 string exMsg = string.Format("索引:{0}\r\n异常信息:{1}\r\n异常地址:{2}\r\n异常时间:{3}", postExIndex, ex.Message, url,DateTime.Now);
                 postDatas.Add(postData);

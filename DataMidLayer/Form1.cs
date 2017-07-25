@@ -1,4 +1,4 @@
-﻿using DataMidLayer.Device;
+﻿using DataMidLayer.DeviceModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

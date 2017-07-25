@@ -7,7 +7,7 @@ using System.Xml;
 using Newtonsoft.Json.Linq;
 using static DataMidLayer.DataSubscribe;
 
-namespace DataMidLayer.Device
+namespace DataMidLayer.DeviceModel
 {
     class MX9000:MX
     {

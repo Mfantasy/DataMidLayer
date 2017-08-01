@@ -239,7 +239,17 @@ namespace DataMidLayer
             while (true)
             {
                 string rain = null;
-                sensor.RefreshXmlData();
+                try
+                {
+                    sensor.RefreshXmlData();
+                }
+                catch (Exception ex)
+                {
+                    Utils.WriteError(ex.Message + "\r\n" + DateTime.Now + "\r\n", "气象站数据接口调用异常.txt");
+                    Thread.Sleep(50 * 1000); // 50秒一监测
+                    continue;                       
+                }
+                
                 Console.WriteLine("数据刷新时间{0}",DateTime.Now);
                 //判断feed中有没有port
                 if (sensor.XmlValues.Count == 5)

@@ -265,6 +265,7 @@ namespace DataMidLayer
     {          
         static int postExIndex = 0;
         static string url = ConfigurationManager.AppSettings["url"];
+        static string surl = ConfigurationManager.AppSettings["surl"];
         public static void PostToSW(string deviceId, int index, string data)
         {
             string postData = GetJson(deviceId, index.ToString(), data);
@@ -273,13 +274,28 @@ namespace DataMidLayer
                 RequestPost(url, postData);
             }
             catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
+            {                
                 postExIndex++;
                 string exMsg = string.Format("索引:{0}\r\n异常信息:{1}\r\n异常地址:{2}\r\n异常时间:{3}", postExIndex, ex.Message, url,DateTime.Now);
                 postDatas.Add(postData);
                 Utils.WriteError(exMsg, "enno异常列表.txt");
-            }                                    
+            }
+            //转发到私有云服务器 | 私有云没有数据缓存          
+            try
+            {
+                string city = ConfigurationManager.AppSettings["resource"];                
+                if (city == "fengxi"&& !string.IsNullOrWhiteSpace(surl))
+                {
+                    RequestPost(surl, postData);
+                }
+            }
+            catch (Exception ex)
+            {
+                postExIndex++;
+                string exMsg = string.Format("索引:{0}\r\n异常信息:{1}\r\n异常地址:{2}\r\n异常时间:{3}", postExIndex, ex.Message, surl, DateTime.Now);
+                Utils.WriteError(exMsg, "enno异常列表.txt");
+            }
+
         }
 
         public static void PostToSW(string deviceId, int index, string data,DateTime dtime)
@@ -296,7 +312,7 @@ namespace DataMidLayer
                 string exMsg = string.Format("索引:{0}\r\n异常信息:{1}\r\n异常地址:{2}\r\n记录时间:{3}", postExIndex, ex.Message, url, dtime);
                 postDatas.Add(postData);
                 Utils.WriteError(exMsg, "enno异常列表(气象站数据补录).txt");
-            }
+            }        
         }
 
         //数据缓存机制

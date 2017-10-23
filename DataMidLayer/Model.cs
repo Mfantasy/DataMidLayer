@@ -87,6 +87,9 @@ namespace DataMidLayer
                     case "MX9110":
                         mx = new MX9110();
                         break;
+                    case "MX7000":
+                        mx = new MX7000();
+                        break;
 
                 }
                 return mx;

@@ -23,35 +23,35 @@
     <gateway>0100000000000411</gateway>
     <node>40</node>
     <model>MX6600</model>
-    <sitewhere></sitewhere>
+    <sitewhere>8b2fc188-2909-43ad-8862-227b82d4c9b3</sitewhere>
   </sensor>
   <sensor>
     <name>总部经济园给水干管2_30</name>
     <gateway>0100000000000411</gateway>
     <node>30</node>
     <model>MX6600</model>
-    <sitewhere></sitewhere>
+    <sitewhere>89fe5002-4348-40db-9b12-372fb188882a</sitewhere>
   </sensor>
   <sensor>
     <name>总部经济园给水干管1_20</name>
     <gateway>0100000000000411</gateway>
     <node>20</node>
     <model>MX6600</model>
-    <sitewhere></sitewhere>
+    <sitewhere>df8ca138-b708-4842-8cdb-cf9aaaff6b0b</sitewhere>
   </sensor>
   <sensor>
     <name>总部经济园供水泵站</name>
     <gateway>0100000000000411</gateway>
     <node>50</node>
     <model>MX6600</model>
-    <sitewhere></sitewhere>
+    <sitewhere>8f476135-a235-478a-8c4d-bac9b9982044</sitewhere>
   </sensor>
   <sensor>
     <name>同德佳苑供水干管</name>
     <gateway>0100000000000412</gateway>
     <node>60</node>
     <model>MX6600</model>
-    <sitewhere></sitewhere>
+    <sitewhere>4d4bbb81-b405-4fba-b551-c7c91668cf51</sitewhere>
   </sensor>
 
   <!--sensor>
@@ -81,7 +81,7 @@
     <gateway>0100000000000411</gateway>
     <node>60</node>
     <model>MX7000</model>
-    <sitewhere></sitewhere>
+    <sitewhere>6cf23e96-b40b-4d9d-8740-6ebd3391ee91</sitewhere>
   </sensor>
 
   <!--sensor>
@@ -104,7 +104,7 @@
     <gateway>0100000000000610</gateway>
     <node>300</node>
     <model>MX7000</model>
-    <sitewhere></sitewhere>
+    <sitewhere>cbfa675e-7228-4ee6-9375-d5b288d3d458</sitewhere>
   </sensor>
   <!--sensor>
     <name>沣润和园雨水模块2_20</name>
@@ -147,42 +147,42 @@
     <gateway>0100000000000630</gateway>
     <node>40</node>
     <model>MX9000</model>
-    <sitewhere></sitewhere>
+    <sitewhere>3c33d915-49b8-4292-bf1c-4ce643d9f772</sitewhere>
   </sensor>
   <sensor>
     <name>沣润和园雨水模块1_30</name>
     <gateway>0100000000000630</gateway>
     <node>30</node>
     <model>MX9000</model>
-    <sitewhere></sitewhere>
+    <sitewhere>167b4d73-0bdc-476f-9fdb-24552f3fbac9</sitewhere>
   </sensor>
   <sensor>
     <name>西部云谷雨水模块2_40</name>
     <gateway>0100000000000410</gateway>
     <node>40</node>
     <model>MX9000</model>
-    <sitewhere></sitewhere>
+    <sitewhere>4733ee94-5ab9-46d0-8bde-f4b012198cf4</sitewhere>
   </sensor>
   <sensor>
     <name>西部云谷雨水模块1_30</name>
     <gateway>0100000000000410</gateway>
     <node>30</node>
     <model>MX9000</model>
-    <sitewhere></sitewhere>
+    <sitewhere>a323ce44-9c47-4896-83e7-9e8fd145a7ac</sitewhere>
   </sensor>
   <sensor>
     <name>沣西一校雨水模块40</name>
     <gateway>0100000000000413</gateway>
     <node>40</node>
     <model>MX9000</model>
-    <sitewhere></sitewhere>
+    <sitewhere>2d86ec43-6c89-462e-a05c-60d738495f0b</sitewhere>
   </sensor>
   <sensor>
     <name>沣西一校雨水模块30</name>
     <gateway>0100000000000413</gateway>
     <node>30</node>
     <model>MX9000</model>
-    <sitewhere></sitewhere>
+    <sitewhere>623a1faf-c89e-490f-a9f9-408d5506b8d9</sitewhere>
   </sensor>
   <!--暂未生效sensor>
     <name>天福和园东南排口</name>

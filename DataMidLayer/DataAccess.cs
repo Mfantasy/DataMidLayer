@@ -16,8 +16,10 @@ using System.Xml.Serialization;
 
 namespace DataMidLayer
 {
-    static class DataAccess
+    public static class DataAccess
     {
+        public static bool IsSendSi = false;
+
         public static object lockObj = new object();
         /// <summary>
         /// 发送邮件(此方法占用网络时间,需用开线程调用)
@@ -281,19 +283,22 @@ namespace DataMidLayer
                 Utils.WriteError(exMsg, "enno异常列表.txt");
             }
             //转发到私有云服务器 | 私有云没有数据缓存          
-            try
+            if (DataAccess.IsSendSi)
             {
-                string city = ConfigurationManager.AppSettings["resource"];                
-                if (city == "fengxi"&& !string.IsNullOrWhiteSpace(surl))
+                try
                 {
-                    RequestPost(surl, postData);
+                    string city = ConfigurationManager.AppSettings["resource"];
+                    if (city == "fengxi" && !string.IsNullOrWhiteSpace(surl))
+                    {
+                        RequestPost(surl, postData);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                postExIndex++;
-                string exMsg = string.Format("索引:{0}\r\n异常信息:{1}\r\n异常地址:{2}\r\n异常时间:{3}", postExIndex, ex.Message, surl, DateTime.Now);
-                Utils.WriteError(exMsg, "enno异常列表.txt");
+                catch (Exception ex)
+                {
+                    postExIndex++;
+                    string exMsg = string.Format("索引:{0}\r\n异常信息:{1}\r\n异常地址:{2}\r\n异常时间:{3}", postExIndex, ex.Message, surl, DateTime.Now);
+                    Utils.WriteError(exMsg, "enno异常列表.txt");
+                }
             }
 
         }

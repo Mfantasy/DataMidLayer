@@ -491,6 +491,18 @@ namespace DataMidLayer
             }
         }
 
-      
+        private void 西咸私有云发送ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (DataAccess.IsSendSi)
+            {
+                西咸私有云发送ToolStripMenuItem.Text = "西咸私有云发送:关(当前)";
+                DataAccess.IsSendSi = false;
+            }
+            else
+            {
+                西咸私有云发送ToolStripMenuItem.Text = "西咸私有云发送:开(当前)";
+                DataAccess.IsSendSi = true;
+            }
+        }
     }
 }

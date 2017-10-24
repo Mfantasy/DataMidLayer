@@ -46,6 +46,7 @@
             this.labelEX = new System.Windows.Forms.ToolStripStatusLabel();
             this.dcount = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.西咸私有云发送ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -168,7 +169,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.获取异常设备列表邮件ToolStripMenuItem,
-            this.气象站数据中断监测ToolStripMenuItem});
+            this.气象站数据中断监测ToolStripMenuItem,
+            this.西咸私有云发送ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(842, 25);
@@ -228,6 +230,13 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(56, 17);
             this.toolStripStatusLabel1.Text = "数据缓存";
             // 
+            // 西咸私有云发送ToolStripMenuItem
+            // 
+            this.西咸私有云发送ToolStripMenuItem.Name = "西咸私有云发送ToolStripMenuItem";
+            this.西咸私有云发送ToolStripMenuItem.Size = new System.Drawing.Size(151, 21);
+            this.西咸私有云发送ToolStripMenuItem.Text = "西咸私有云发送:关(当前)";
+            this.西咸私有云发送ToolStripMenuItem.Click += new System.EventHandler(this.西咸私有云发送ToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -277,6 +286,7 @@
         public System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripMenuItem 气象站数据中断监测ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 打开ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 西咸私有云发送ToolStripMenuItem;
     }
 }
 

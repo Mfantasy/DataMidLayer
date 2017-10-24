@@ -19,12 +19,12 @@ namespace DataMidLayer.DeviceModel
 
         public override void PostDataByXml(Sensor ss)
         {
-            PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[0]);
+            PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[1]);
         }
 
         protected override void PostData(JObject jobj, Sensor ss)
         {
-            WaterLevel = jobj["body"]["children"][0]["data"][0]["value"].ToString();
+            WaterLevel = jobj["body"]["children"][1]["data"][0]["value"].ToString();
             PostS.PostToSW(ss.SiteWhereId, 1, WaterLevel);
         }
     }

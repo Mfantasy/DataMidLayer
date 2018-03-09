@@ -32,6 +32,7 @@ namespace DataMidLayer
             else if (ConfigurationManager.AppSettings["resource"]=="baichengcity")
             {
                 this.Text = "白城海绵数据转发";
+                西咸私有云发送ToolStripMenuItem.Visible = false;
             }
             else
             {
@@ -45,6 +46,14 @@ namespace DataMidLayer
             tm.Interval = 30 * 1000 * 60; //30分钟
             tm.Tick += Tm_Tick;
             tm.Start();   
+
+            //我想要获取 当前处于Ex状态的设备列表(超时或离线都是Ex)
+            //working状态下的设备 ( 离线是working (暂时发现有时候会一直连不上服务))
+            //获取这些东西的目的是 根据数量判定服务是否运行稳定 
+
+
+
+
         }
 
         private void Tm_Tick(object sender, EventArgs e)
@@ -151,24 +160,7 @@ namespace DataMidLayer
                 labelEX.Text = "异常(" + indexEX.Count.ToString() + ")";
             }));
         }
-
-
-        void SendMail()
-        {
-            while (true)
-            {
-                Thread.Sleep(24 * 60 * 60 * 1000);
-                List<Sensor> exSensors = sensors.FindAll(ss => ss.IsEx);
-                string title = "沣西海绵城市设备状态提醒";
-                string body = "当前异常设备(超时判定时间:" + ConfigurationManager.AppSettings["数据超时判定时间"] + ")分钟\r\n";
-                foreach (Sensor item in exSensors)
-                {
-                    body += item.Name + "\t" + item.Addr + "\r\n";
-                }
-                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DataAccess.SendMail(title, body)));
-            }
-        }
-
+      
         private void button2_Click(object sender, EventArgs e)
         {
             sensor.SensorModel.PostDataByXml(sensor);
@@ -503,6 +495,20 @@ namespace DataMidLayer
                 西咸私有云发送ToolStripMenuItem.Text = "西咸私有云发送:开(当前)";
                 DataAccess.IsSendSi = true;
             }
+        }
+
+        private void 异常设备统计ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<Sensor> exSensors = sensors.FindAll(ss => ss.IsEx);
+            FormExCount fec = new FormExCount(exSensors);
+            fec.Show();
+        }
+
+        private void toolStripStatusLabel2_Click(object sender, EventArgs e)
+        {
+            //刷新异常设备数量
+            List<Sensor> exSensors = sensors.FindAll(ss => ss.IsEx);
+            toolStripStatusLabel2.Text = "刷新异常设备数量: " + exSensors.Count;
         }
     }
 }

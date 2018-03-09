@@ -41,7 +41,8 @@ namespace DataMidLayer.DeviceModel
         }
 
         public void Post(string str,Sensor ss)
-        {           
+        {
+            ss.LastTime = DateTime.Now;
             JObject jobj = JObject.Parse(str);
             PostData(jobj,ss);
         }

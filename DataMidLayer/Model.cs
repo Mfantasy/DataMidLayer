@@ -19,6 +19,8 @@ namespace DataMidLayer
         public int OverTimeM { get; set; } //超时时间(分)        
         public bool Moni { get; set; } //是否模拟数据
 
+        public DateTime LastTime { get; set; }//最后一条数据时间
+
         public event EventHandler CatchEx;
         public void ExCatched()
         {

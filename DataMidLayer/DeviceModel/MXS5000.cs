@@ -103,7 +103,8 @@ namespace DataMidLayer.DeviceModel
         }
 
         public void PostByXml(Sensor ss, string rain,DateTime dt)
-        {            
+        {       
+            //用于雨量自动补全
             if (ss.XmlValues.Count == 5)
             {
                 PostS.PostToSW(ss.SiteWhereId, 1, rain, dt);

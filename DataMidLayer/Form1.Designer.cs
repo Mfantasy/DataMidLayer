@@ -42,11 +42,13 @@
             this.获取异常设备列表邮件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.气象站数据中断监测ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.打开ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.西咸私有云发送ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.labelEX = new System.Windows.Forms.ToolStripStatusLabel();
             this.dcount = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.西咸私有云发送ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.异常设备统计ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -170,7 +172,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.获取异常设备列表邮件ToolStripMenuItem,
             this.气象站数据中断监测ToolStripMenuItem,
-            this.西咸私有云发送ToolStripMenuItem});
+            this.西咸私有云发送ToolStripMenuItem,
+            this.异常设备统计ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(842, 25);
@@ -182,6 +185,7 @@
             this.获取异常设备列表邮件ToolStripMenuItem.Name = "获取异常设备列表邮件ToolStripMenuItem";
             this.获取异常设备列表邮件ToolStripMenuItem.Size = new System.Drawing.Size(116, 21);
             this.获取异常设备列表邮件ToolStripMenuItem.Text = "获取设备状态邮件";
+            this.获取异常设备列表邮件ToolStripMenuItem.Visible = false;
             this.获取异常设备列表邮件ToolStripMenuItem.Click += new System.EventHandler(this.获取异常设备列表邮件ToolStripMenuItem_Click);
             // 
             // 气象站数据中断监测ToolStripMenuItem
@@ -190,21 +194,29 @@
             this.打开ToolStripMenuItem});
             this.气象站数据中断监测ToolStripMenuItem.Name = "气象站数据中断监测ToolStripMenuItem";
             this.气象站数据中断监测ToolStripMenuItem.Size = new System.Drawing.Size(128, 21);
-            this.气象站数据中断监测ToolStripMenuItem.Text = "气象站数据中断监测";
+            this.气象站数据中断监测ToolStripMenuItem.Text = "气象站数据中断补传";
             // 
             // 打开ToolStripMenuItem
             // 
             this.打开ToolStripMenuItem.Name = "打开ToolStripMenuItem";
-            this.打开ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.打开ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.打开ToolStripMenuItem.Text = "打开";
             this.打开ToolStripMenuItem.Click += new System.EventHandler(this.打开ToolStripMenuItem_Click);
+            // 
+            // 西咸私有云发送ToolStripMenuItem
+            // 
+            this.西咸私有云发送ToolStripMenuItem.Name = "西咸私有云发送ToolStripMenuItem";
+            this.西咸私有云发送ToolStripMenuItem.Size = new System.Drawing.Size(151, 21);
+            this.西咸私有云发送ToolStripMenuItem.Text = "西咸私有云发送:关(当前)";
+            this.西咸私有云发送ToolStripMenuItem.Click += new System.EventHandler(this.西咸私有云发送ToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.labelEX,
             this.dcount,
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel2});
             this.statusStrip1.Location = new System.Drawing.Point(0, 539);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(842, 22);
@@ -230,12 +242,19 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(56, 17);
             this.toolStripStatusLabel1.Text = "数据缓存";
             // 
-            // 西咸私有云发送ToolStripMenuItem
+            // 异常设备统计ToolStripMenuItem
             // 
-            this.西咸私有云发送ToolStripMenuItem.Name = "西咸私有云发送ToolStripMenuItem";
-            this.西咸私有云发送ToolStripMenuItem.Size = new System.Drawing.Size(151, 21);
-            this.西咸私有云发送ToolStripMenuItem.Text = "西咸私有云发送:关(当前)";
-            this.西咸私有云发送ToolStripMenuItem.Click += new System.EventHandler(this.西咸私有云发送ToolStripMenuItem_Click);
+            this.异常设备统计ToolStripMenuItem.Name = "异常设备统计ToolStripMenuItem";
+            this.异常设备统计ToolStripMenuItem.Size = new System.Drawing.Size(92, 21);
+            this.异常设备统计ToolStripMenuItem.Text = "异常设备统计";
+            this.异常设备统计ToolStripMenuItem.Click += new System.EventHandler(this.异常设备统计ToolStripMenuItem_Click);
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabel2.Text = "刷新异常设备数量: 0";
+            this.toolStripStatusLabel2.Click += new System.EventHandler(this.toolStripStatusLabel2_Click);
             // 
             // Form1
             // 
@@ -287,6 +306,8 @@
         private System.Windows.Forms.ToolStripMenuItem 气象站数据中断监测ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 打开ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 西咸私有云发送ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 异常设备统计ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
 

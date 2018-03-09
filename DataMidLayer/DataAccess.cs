@@ -27,6 +27,7 @@ namespace DataMidLayer
         /// </summary>                
         public static void SendMail(string title, string body, string rec="")
         {
+            return;
             MailAddress EmailFrom = new MailAddress(ConfigurationManager.AppSettings["发件人地址"], ConfigurationManager.AppSettings["发件人昵称"]);
             MailMessage mailMsg = new MailMessage();
             mailMsg.From = EmailFrom;
@@ -295,6 +296,7 @@ namespace DataMidLayer
                 }
                 catch (Exception ex)
                 {
+                    
                     postExIndex++;
                     string exMsg = string.Format("索引:{0}\r\n异常信息:{1}\r\n异常地址:{2}\r\n异常时间:{3}", postExIndex, ex.Message, surl, DateTime.Now);
                     Utils.WriteError(exMsg, "enno异常列表.txt");

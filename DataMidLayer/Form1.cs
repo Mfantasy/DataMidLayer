@@ -127,6 +127,10 @@ namespace DataMidLayer
                     s.Gateway = item.SelectSingleNode("gateway").InnerText;
                     s.Type = item.SelectSingleNode("model").InnerText;
                     s.SiteWhereId = item.SelectSingleNode("sitewhere").InnerText;
+                    if (item.SelectSingleNode("table") != null)
+                    {
+                        s.Table = item.SelectSingleNode("table").InnerText;
+                    }
                     s.Moni = bool.Parse(ConfigurationManager.AppSettings["是否模拟"]);                    
                     s.OverTimeM = int.Parse(ConfigurationManager.AppSettings["数据超时判定时间"]);                    
 

@@ -109,6 +109,7 @@ namespace DataMidLayer
             int ini = 0;
             ss.Log.Add(DateTime.Now.ToString() + log1);  
               ss.IsWorking = true;
+            //断线是因为Tcp连接异常
             TcpClient tcp = new TcpClient();
             NetworkStream stream = null;
             string ip = ConfigurationManager.AppSettings["ip"];
@@ -177,9 +178,11 @@ namespace DataMidLayer
                         try  //json格式校验
                         { JObject.Parse(jstr); }
                         catch { ss.Log.Add("json解析失败 " + DateTime.Now.ToString()); continue; }
+                        //到了此处才是正式向ENNO POST数据
                         try  //Post
-                        {
+                        {                            
                             ss.SensorModel.Post(jstr, ss);
+                            ss.SaveData();
                             times++;
                             ss.Log[1] = DateTime.Now.ToString() + " 次数:\t" + times.ToString();
                             ss.IsEx = false;
@@ -190,7 +193,6 @@ namespace DataMidLayer
                             exId++;
                             string msg = string.Format("异常索引:{0}\r\n异常设备:{1}\r\n异常时间{2}\r\n异常名称:{3}\r\n异常备注:{4}\r\n", exId, ss.Name + " " + ss.Type, DateTime.Now, exPost.Message, "Post异常");
                             Utils.WriteError(msg);
-
                         }
                     }
                     catch (Exception exM)

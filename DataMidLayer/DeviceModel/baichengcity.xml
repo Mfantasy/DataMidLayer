@@ -48,6 +48,7 @@
     <node>0</node>
     <model>MXS5000</model>
     <sitewhere>2f59621b-3a27-4c5a-ab3f-7b8cc4db86c6</sitewhere>
+	<table>RA3-L1</table>
   </sensor>
   <sensor>
     <name>白城市建委气象监测站</name>
@@ -255,6 +256,7 @@
     <node>7</node>
     <model>MX8300</model>
     <sitewhere>1c2c70ab-753c-4ae6-adf9-5933d6bc9b45</sitewhere>
+	<table>O1-L1</table>
   </sensor>
   <sensor>
     <name>纵十七路7YS17660</name>
@@ -382,6 +384,7 @@
     <node>7</node>
     <model>MX9110</model>
     <sitewhere>2531ef42-2eaf-46b1-879c-f2dd161a01b5</sitewhere>
+	<table>O1-L1</table>
   </sensor>
   <sensor>
     <name>规划三河鹤鸣湖出水桥</name>

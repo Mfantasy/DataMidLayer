@@ -122,6 +122,20 @@ namespace DataMidLayer.DeviceModel
                 //PostS.PostToSW(ss.SiteWhereId, 3, ss.XmlValues[5], dt);
             }         
         }
-       
+
+        public override void SaveData(string tbHeader)
+        {
+            string tbRain = tbHeader + "雨量";
+            string tbWs = tbHeader + "风速";
+            string tbWd = tbHeader + "风向";
+            string tbTem = tbHeader + "空气温度";
+            string tbHum = tbHeader + "空气湿度";
+            SQL sql = new SQL();
+            sql.Insert(tbRain, rain);
+            sql.Insert(tbWs,windSpeed);
+            sql.Insert(tbWd, windDirection);
+            sql.Insert(tbTem, temperature);
+            sql.Insert(tbHum,humidity);
+        }
     }
 }

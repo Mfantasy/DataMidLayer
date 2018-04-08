@@ -41,5 +41,10 @@ namespace DataMidLayer.DeviceModel
            Status = jobj["body"]["children"][1]["data"][0]["value"].ToString();
            PostS.PostToSW(ss.SiteWhereId, 1, Status);
         }
+
+        public override void SaveData(string tbHeader)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

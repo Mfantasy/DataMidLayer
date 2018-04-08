@@ -22,6 +22,19 @@ namespace DataMidLayer.DeviceModel
             PostS.PostToSW(ss.SiteWhereId, 4, ss.XmlValues[4]);
         }
 
+        public override void SaveData(string tbHeader)
+        {
+            string tbLl = tbHeader + "流量";
+            string tbLs = tbHeader + "流速";
+            string tbWd = tbHeader + "温度";
+            string tbYw = tbHeader + "液位";
+            SQL sql = new SQL();
+            sql.Insert(tbLl,LiuLiang);
+            sql.Insert(tbLs,LiuSu);
+            sql.Insert(tbWd,WenDu);
+            sql.Insert(tbYw,YeWei);
+        }
+
         protected override void PostData(JObject jobj, Sensor ss)
         {
             LiuLiang = jobj["body"]["children"][0]["data"][0]["value"].ToString();

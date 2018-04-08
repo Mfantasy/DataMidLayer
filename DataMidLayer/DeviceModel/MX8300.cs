@@ -22,6 +22,13 @@ namespace DataMidLayer.DeviceModel
             PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[1]);
         }
 
+        public override void SaveData(string tbHeader)
+        {
+            string tbYw = tbHeader + "液位";
+            SQL sql = new SQL();
+            sql.Insert(tbYw, status);
+        }
+
         protected override void PostData(JObject jobj, Sensor ss)
         {
             Status = jobj["body"]["children"][1]["data"][0]["value"].ToString();

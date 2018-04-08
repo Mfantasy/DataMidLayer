@@ -20,6 +20,11 @@ namespace DataMidLayer.DeviceModel
             PostS.PostToSW(ss.SiteWhereId, 2, ss.XmlValues[2]);
         }
 
+        public override void SaveData(string tbHeader)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void PostData(JObject jobj, Sensor ss)
         {
             Flow = jobj["body"]["children"][1]["data"][0]["value"].ToString();

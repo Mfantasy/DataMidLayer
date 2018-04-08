@@ -22,6 +22,11 @@ namespace DataMidLayer.DeviceModel
             PostS.PostToSW(ss.SiteWhereId, 1, ss.XmlValues[1]);
         }
 
+        public override void SaveData(string tbHeader)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void PostData(JObject jobj, Sensor ss)
         {
             WaterLevel = jobj["body"]["children"][1]["data"][0]["value"].ToString();

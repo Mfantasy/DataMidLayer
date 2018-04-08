@@ -11,6 +11,24 @@ namespace DataMidLayer
 {
     public class Sensor
     {
+
+        #region 白城设备需实时入库(华霖富软件展示实时数据)
+        static bool isbc = ConfigurationManager.AppSettings["resource"] == "baichengcity";
+        public string Table { get; set; }
+        public void SaveData()
+        {
+            if (isbc)
+            {
+                if (!string.IsNullOrWhiteSpace(Table))
+                {
+                    string tbHeader = $"{Table}_{this.Type}_";
+                    this.SensorModel.SaveData(tbHeader);
+                }
+            }            
+        }
+
+        #endregion
+
         //EXProperties
         public bool IsWorking { get; set; }
         public bool IsEx { get; set; }
@@ -38,64 +56,67 @@ namespace DataMidLayer
         List<string> log = new List<string>();
         public List<string> Log { get { return log; } set { log = value; } }
 
+        MX mx = null;
         public MX SensorModel
         {
-            get {             
-                MX mx = null;
-                switch (Type.ToUpper())
+            get {
+                if (mx == null)
                 {
-                    case "MXS5000":
-                        mx = new MXS5000();
-                        break;
-                    case "MXS1501":
-                        mx = new MXS1501();
-                        break;
-                    case "MXS1402":
-                        mx = new MXS1402();
-                        break;
-                    case "MXS1204":
-                        mx = new MXS1204();
-                        break;           
-                    case "MX9000":
-                        mx = new MX9000();
-                        break;
-                    case "MX7200":
-                        mx = new MX7200();
-                        break;
-                    case "MX6100":
-                        mx = new MX6100();
-                        break;
-                    case "MXS1201":
-                        mx = new MXS1201();
-                        break;
-                    case "MX8000":
-                        mx = new MX8000();
-                        break;
-                    case "MX8100":
-                        mx = new MX8100();
-                        break;
-                    case "MX6300":
-                        mx = new MX6300();
-                        break;
-                    case "MX6400":
-                        mx = new MX6400();
-                        break;
-                    case "MX8300":
-                        mx = new MX8300();
-                        break;
-                    case "MX9100":
-                        mx = new MX9100();
-                        break;
-                    case "MX9110":
-                        mx = new MX9110();
-                        break;
-                    case "MX7000":
-                        mx = new MX7000();
-                        break;
-                    case "MX6600":
-                        mx = new MX6600();
-                        break;
+                    switch (Type.ToUpper())
+                    {
+                        case "MXS5000":
+                            mx = new MXS5000();
+                            break;
+                        case "MXS1501":
+                            mx = new MXS1501();
+                            break;
+                        case "MXS1402":
+                            mx = new MXS1402();
+                            break;
+                        case "MXS1204":
+                            mx = new MXS1204();
+                            break;
+                        case "MX9000":
+                            mx = new MX9000();
+                            break;
+                        case "MX7200":
+                            mx = new MX7200();
+                            break;
+                        case "MX6100":
+                            mx = new MX6100();
+                            break;
+                        case "MXS1201":
+                            mx = new MXS1201();
+                            break;
+                        case "MX8000":
+                            mx = new MX8000();
+                            break;
+                        case "MX8100":
+                            mx = new MX8100();
+                            break;
+                        case "MX6300":
+                            mx = new MX6300();
+                            break;
+                        case "MX6400":
+                            mx = new MX6400();
+                            break;
+                        case "MX8300":
+                            mx = new MX8300();
+                            break;
+                        case "MX9100":
+                            mx = new MX9100();
+                            break;
+                        case "MX9110":
+                            mx = new MX9110();
+                            break;
+                        case "MX7000":
+                            mx = new MX7000();
+                            break;
+                        case "MX6600":
+                            mx = new MX6600();
+                            break;
 
+                    }
                 }
                 return mx;
             }

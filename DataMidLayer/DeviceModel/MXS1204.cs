@@ -55,5 +55,10 @@ namespace DataMidLayer.DeviceModel
             PostS.PostToSW(ss.SiteWhereId, 2, ss.XmlValues[3]);
             PostS.PostToSW(ss.SiteWhereId, 3, ss.XmlValues[4]);
         }
+
+        public override void SaveData(string tbHeader)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

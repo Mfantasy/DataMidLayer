@@ -46,9 +46,10 @@ namespace DataMidLayer.DeviceModel
             JObject jobj = JObject.Parse(str);
             PostData(jobj,ss);
         }
-
+     
         protected abstract void PostData(JObject jobj,Sensor ss);
         public abstract void PostDataByXml(Sensor ss);
+        public abstract void SaveData(string tbHeader);
             
     }
      

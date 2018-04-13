@@ -24,7 +24,9 @@ namespace DataMidLayer.DeviceModel
 
         public override void SaveData(string tbHeader)
         {
-            throw new NotImplementedException();
+            string tb = tbHeader + "TSS值";
+            SQL sql = new SQL();
+            sql.Insert(tb, status);
         }
 
         protected override void PostData(JObject jobj, Sensor ss)

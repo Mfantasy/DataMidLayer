@@ -13,6 +13,7 @@
     <node>0</node>
     <model>MXS5000</model>
     <sitewhere>f1042b49-6e69-45c1-8872-7bfd1d58d552</sitewhere>
+    <table>RA4-S4</table>
   </sensor>
   <sensor>
     <name>科普公园气象站</name>
@@ -20,6 +21,7 @@
     <node>0</node>
     <model>MXS5000</model>
     <sitewhere>67e72c79-6c76-4c6c-9471-90b368db39ea</sitewhere>
+    <table>RA2-S1</table>
   </sensor>
   <sensor>
     <name>劳动公园气象站</name>
@@ -93,6 +95,7 @@
     <node>1</node>
     <model>MX6300</model>
     <sitewhere>d227d0eb-17a4-440e-881f-460e25a4c48c</sitewhere>
+    <table>SB6-R1</table>
   </sensor>
   <sensor>
     <name>规划三河鹤鸣湖出水桥</name>
@@ -100,6 +103,7 @@
     <node>11</node>
     <model>MX6300</model>
     <sitewhere>8df12fa1-8295-461e-9293-9a5e349cd033</sitewhere>
+    <table>R2-L1</table>
   </sensor>
   <sensor>
     <name>规划二河鹤鸣湖出水桥</name>
@@ -107,6 +111,7 @@
     <node>6</node>
     <model>MX6300</model>
     <sitewhere>50172ddd-e80e-457e-ac80-be2e288d247a</sitewhere>
+    <table>R3-L1</table>
   </sensor>
   <sensor>
     <name>长庆南街与丽江路交口北侧7YS862</name>
@@ -114,6 +119,7 @@
     <node>15</node>
     <model>MX6300</model>
     <sitewhere>860028a9-981d-483d-949d-08a22a064835</sitewhere>
+    <table>P14-R2</table>
   </sensor>
   <sensor>
     <name>规划一河：出水闸口</name>
@@ -121,6 +127,7 @@
     <node>9</node>
     <model>MX6300</model>
     <sitewhere>277adaf6-d565-4da6-a673-7dd0e84d4a9e</sitewhere>
+    <table>R5-L1</table>
   </sensor>
   <sensor>
     <name>纵八路与丽江路交口北侧7YS892</name>
@@ -128,6 +135,7 @@
     <node>5</node>
     <model>MX6300</model>
     <sitewhere>4314fe47-7f90-4b8a-ab9f-c9b3bc9c23eb</sitewhere>
+    <table>P13-R1</table>
   </sensor>
   <sensor>
     <name>纵七路与丽江路交口北侧7YS2381</name>
@@ -135,6 +143,7 @@
     <node>8</node>
     <model>MX6300</model>
     <sitewhere>15406de2-1c5c-4c44-80cb-d8f2dd1f8213</sitewhere>
+    <table>P12-R1</table>
   </sensor>
   <sensor>
     <name>纵八路东侧新区中学出水口</name>
@@ -142,6 +151,7 @@
     <node>10</node>
     <model>MX6300</model>
     <sitewhere>641b4d41-6126-4b05-ba3d-52c9cdee2116</sitewhere>
+    <table>SB7-R2</table>
   </sensor>
   <sensor>
     <name>橫九路市民中心出水口1</name>
@@ -149,6 +159,7 @@
     <node>12</node>
     <model>MX6300</model>
     <sitewhere>4f4eaf56-40fb-4592-80f6-eeefd3b10854</sitewhere>
+    <table>SB8-R3</table>
   </sensor>
   <!--6400井下水质TSS值-->
   <sensor>
@@ -157,6 +168,7 @@
     <node>1</node>
     <model>MX6400</model>
     <sitewhere>c7e7645f-688b-409c-b9b1-6209db876b35</sitewhere>
+    <table>SB6-R1</table>
   </sensor>
   <sensor>
     <name>规划三河鹤鸣湖出水桥</name>
@@ -164,6 +176,7 @@
     <node>11</node>
     <model>MX6400</model>
     <sitewhere>c1b0b837-47be-4f75-a249-80d1f12af4f2</sitewhere>
+    <table>R2-L1</table>
   </sensor>
   <sensor>
     <name>规划二河鹤鸣湖出水桥</name>
@@ -171,6 +184,7 @@
     <node>6</node>
     <model>MX6400</model>
     <sitewhere>be40668f-5978-4dd7-b9c8-561049722896</sitewhere>
+    <table>R3-L1</table>
   </sensor>
   <sensor>
     <name>长庆南街与丽江路交口北侧7YS862</name>
@@ -178,6 +192,7 @@
     <node>15</node>
     <model>MX6400</model>
     <sitewhere>23df1a67-12ef-4611-9c00-dc7737b59ed9</sitewhere>
+    <table>P14-R2</table>
   </sensor>
   <sensor>
     <name>规划一河：出水闸口</name>
@@ -185,6 +200,7 @@
     <node>9</node>
     <model>MX6400</model>
     <sitewhere>31cd0b82-b972-41e1-9ee9-cc0e6ea7fec0</sitewhere>
+    <table>R5-L1</table>
   </sensor>
   <sensor>
     <name>纵八路与丽江路交口北侧7YS892</name>
@@ -192,6 +208,7 @@
     <node>5</node>
     <model>MX6400</model>
     <sitewhere>360f898a-568c-45d0-a117-aff7be3ed6f0</sitewhere>
+    <table>P13-R1</table>
   </sensor>
   <sensor>
     <name>纵七路与丽江路交口北侧7YS2381</name>
@@ -199,6 +216,7 @@
     <node>8</node>
     <model>MX6400</model>
     <sitewhere>e9b7d8e6-c3f9-4443-aa9a-08831fc01252</sitewhere>
+    <table>P12-R1</table>
   </sensor>
   <sensor>
     <name>纵八路东侧新区中学出水口</name>
@@ -206,6 +224,7 @@
     <node>10</node>
     <model>MX6400</model>
     <sitewhere>91c37767-8a63-43bd-be38-86e384019b6c</sitewhere>
+    <table>SB7-R2</table>
   </sensor>
   <sensor>
     <name>橫九路市民中心出水口1</name>
@@ -213,6 +232,7 @@
     <node>12</node>
     <model>MX6400</model>
     <sitewhere>b5b6d7f3-bdfe-4e9e-a527-e56a792ca718</sitewhere>
+    <table>SB8-R3</table>
   </sensor>
   <!--8300井下液位T型-->
   <sensor>
@@ -221,6 +241,7 @@
     <node>1</node>
     <model>MX8300</model>
     <sitewhere>66dfc53e-5dd4-4668-8cf3-dad226ddf503</sitewhere>
+    <table>SB6-R1</table>
   </sensor>
   <sensor>
     <name>南干渠华严寺正门绿化带雨水井</name>
@@ -228,6 +249,7 @@
     <node>2</node>
     <model>MX8300</model>
     <sitewhere>77deb1ef-6136-4d58-8e08-6382a86a5b46</sitewhere>
+    <table>O4-S4</table>
   </sensor>
   <sensor>
     <name>南干渠华严寺正门污水井</name>
@@ -235,6 +257,7 @@
     <node>3</node>
     <model>MX8300</model>
     <sitewhere>a0981f0b-3584-4207-8fe3-21f9500effb6</sitewhere>
+    <table>P11-S4</table>
   </sensor>
   <sensor>
     <name>规划二河鹤鸣湖出水桥</name>
@@ -242,6 +265,7 @@
     <node>6</node>
     <model>MX8300</model>
     <sitewhere>9d09f450-df99-48a2-a237-577eeec05648</sitewhere>
+    <table>R3-L1</table>
   </sensor>
   <sensor>
     <name>胜利路与金辉街交口西侧2YS142</name>
@@ -249,6 +273,7 @@
     <node>4</node>
     <model>MX8300</model>
     <sitewhere>5f5dcc6f-c07b-44cd-a3b5-9a001bb43445</sitewhere>
+    <table>P7-S2</table>
   </sensor>
   <sensor>
     <name>鹤鸣湖西侧7YS2516</name>
@@ -264,6 +289,7 @@
     <node>14</node>
     <model>MX8300</model>
     <sitewhere>645cc96c-d355-417b-be66-b6955edee152</sitewhere>
+    <table>O2-L1</table>
   </sensor>
   <sensor>
     <name>纵八路与丽江路交口北侧7YS892</name>
@@ -271,6 +297,7 @@
     <node>5</node>
     <model>MX8300</model>
     <sitewhere>f8a7664b-6744-4b08-bfe7-1954dd02d808</sitewhere>
+    <table>P13-R1</table>
   </sensor>
   <sensor>
     <name>东海路与长庆南街交口东侧7YS128</name>
@@ -278,6 +305,7 @@
     <node>13</node>
     <model>MX8300</model>
     <sitewhere>5e40f288-af41-4891-8ed0-c9c2f5968f38</sitewhere>
+    <table>SB9-L1</table>
   </sensor>
   <sensor>
     <name>橫九路市民中心出水口1</name>
@@ -285,6 +313,7 @@
     <node>12</node>
     <model>MX8300</model>
     <sitewhere>ec32d18e-bfb3-4a1f-baba-b947f3da6971</sitewhere>
+    <table>SB8-R3</table>
   </sensor>
   <sensor>
     <name>规划三河鹤鸣湖出水桥</name>
@@ -292,6 +321,7 @@
     <node>11</node>
     <model>MX8300</model>
     <sitewhere>eb7e283e-c368-4d7d-aedb-0e16db830a87</sitewhere>
+    <table>R2-L1</table>
   </sensor>
   <sensor>
     <name>长庆南街与丽江路交口北侧7YS862</name>
@@ -299,6 +329,7 @@
     <node>15</node>
     <model>MX8300</model>
     <sitewhere>d56b94b4-ba55-4bf0-9139-9d5439650eb2</sitewhere>
+    <table>P14-R2</table>
   </sensor>
   <sensor>
     <name>纵八路与丽江路交口北侧7YS892</name>
@@ -306,6 +337,7 @@
     <node>5</node>
     <model>MX8300</model>
     <sitewhere>f8a7664b-6744-4b08-bfe7-1954dd02d808</sitewhere>
+    <table>P13-R1</table>
   </sensor>
   <sensor>
     <name>规划一河：出水闸口</name>
@@ -313,6 +345,7 @@
     <node>9</node>
     <model>MX8300</model>
     <sitewhere>77d2cd3a-bed0-42df-ae13-56b8e63de45d</sitewhere>
+    <table>R5-L1</table>
   </sensor>
   <sensor>
     <name>纵七路与丽江路交口北侧7YS2381</name>
@@ -320,6 +353,7 @@
     <node>8</node>
     <model>MX8300</model>
     <sitewhere>a4108bb6-82ad-4d62-b730-fc5b785d2bcc</sitewhere>
+    <table>P12-R1</table>
   </sensor>
   <sensor>
     <name>纵八路东侧新区中学出水口</name>
@@ -327,6 +361,7 @@
     <node>10</node>
     <model>MX8300</model>
     <sitewhere>6c24f99f-c252-48d8-a64c-fe5481d5fcc6</sitewhere>
+    <table>SB7-R2</table>
   </sensor>
   <sensor>
     <name>海明路与金辉街交口4YS2041</name>
@@ -334,6 +369,7 @@
     <node>16</node>
     <model>MX8300</model>
     <sitewhere>286ea45a-b6be-487f-9331-7b8ea2862fde</sitewhere>
+    <table>P1-S2</table>
   </sensor>
   <sensor>
     <name>民生路与金辉街交口4YS2029</name>
@@ -341,14 +377,32 @@
     <node>18</node>
     <model>MX8300</model>
     <sitewhere>74b6c059-cb9e-44e3-9763-78b1eadad035</sitewhere>
+    <table>P2-S2</table>
   </sensor>
-  <!--9110井下雨水流量T型-->
+  <!--<sensor>
+    <name>胜利西路中国铁塔股份有限公司 </name>
+    <gateway>3030303030303231</gateway>
+    <node>21</node>
+    <model>MX8300</model>
+    <sitewhere>74b6c059-cb9e-44e3-9763-78b1eadad035</sitewhere>
+    <table>P9-S1</table>
+  </sensor>
+  --><!--9110井下雨水流量T型--><!--
+  <sensor>
+    <name>胜利西路中国铁塔股份有限公司 </name>
+    <gateway>3030303030303231</gateway>
+    <node>21</node>
+    <model>MX9110</model>
+    <sitewhere>74b6c059-cb9e-44e3-9763-78b1eadad035</sitewhere>
+    <table>P9-S1</table>
+  </sensor>-->
   <sensor>
     <name>规划二河鹤鸣湖出水桥</name>
     <gateway>3030303030303036</gateway>
     <node>6</node>
     <model>MX9110</model>
     <sitewhere>f64b4290-994b-4a90-bb89-331ec85d77eb</sitewhere>
+    <table>R3-L1</table>
   </sensor>
   <sensor>
     <name>丽江路北侧新区中学出水口</name>
@@ -356,6 +410,7 @@
     <node>1</node>
     <model>MX9110</model>
     <sitewhere>c3ddf196-e580-4fd5-b4cf-329cc9f5d28a</sitewhere>
+    <table>SB6-R1</table>
   </sensor>
   <sensor>
     <name>南干渠华严寺正门污水井</name>
@@ -363,6 +418,7 @@
     <node>3</node>
     <model>MX9110</model>
     <sitewhere>a0981f0b-3584-4207-8fe3-21f9500effb6</sitewhere>
+    <table>P11-S4</table>
   </sensor>
   <sensor>
     <name>南干渠华严寺正门绿化带雨水井</name>
@@ -370,6 +426,7 @@
     <node>2</node>
     <model>MX9110</model>
     <sitewhere>0c13e526-facc-4f53-8e2b-9db6d03d8af1</sitewhere>
+    <table>O4-S4</table>
   </sensor>
   <sensor>
     <name>胜利路与金辉街交口西侧2YS142</name>
@@ -377,6 +434,7 @@
     <node>4</node>
     <model>MX9110</model>
     <sitewhere>54ccdf06-28a5-409a-8091-ec33f48f6ca6</sitewhere>
+    <table>P7-S2</table>
   </sensor>
   <sensor>
     <name>鹤鸣湖西侧7YS2516</name>
@@ -392,6 +450,7 @@
     <node>11</node>
     <model>MX9110</model>
     <sitewhere>926d12aa-b2ea-42d9-88ce-065006595b87</sitewhere>
+    <table>R2-L1</table>
   </sensor>
   <sensor>
     <name>长庆南街与丽江路交口北侧7YS862</name>
@@ -399,6 +458,7 @@
     <node>15</node>
     <model>MX9110</model>
     <sitewhere>192ebcfa-47d8-45d4-b219-55b85855556d</sitewhere>
+    <table>P14-R2</table>
   </sensor>
   <sensor>
     <name>规划一河：出水闸口</name>
@@ -406,6 +466,7 @@
     <node>9</node>
     <model>MX9110</model>
     <sitewhere>fcc87a8c-f655-4821-b1b4-4eb816b32740</sitewhere>
+    <table>R5-L1</table>
   </sensor>
   <sensor>
     <name>纵八路与丽江路交口北侧7YS892</name>
@@ -413,6 +474,7 @@
     <node>5</node>
     <model>MX9110</model>
     <sitewhere>d7e5d929-1140-499d-930d-bb82c8a6faae</sitewhere>
+    <table>P13-R1</table>
   </sensor>
   <sensor>
     <name>纵七路与丽江路交口北侧7YS2381</name>
@@ -420,6 +482,7 @@
     <node>8</node>
     <model>MX9110</model>
     <sitewhere>416d6d94-d650-4fdd-bcc1-aec758dd8f1b</sitewhere>
+    <table>P12-R1</table>
   </sensor>
   <sensor>
     <name>纵八路东侧新区中学出水口</name>
@@ -427,6 +490,7 @@
     <node>10</node>
     <model>MX9110</model>
     <sitewhere>deaa0fae-532d-4d66-ae67-e9b211c76768</sitewhere>
+    <table>SB7-R2</table>
   </sensor>
   <sensor>
     <name>橫九路市民中心出水口1</name>
@@ -434,6 +498,7 @@
     <node>12</node>
     <model>MX9110</model>
     <sitewhere>a18d61c2-ce15-4337-93ba-357826c5870b</sitewhere>
+    <table>SB8-R3</table>
   </sensor>
   <sensor>
     <name>东海路与长庆南街交口东侧7YS128</name>
@@ -441,6 +506,7 @@
     <node>13</node>
     <model>MX9110</model>
     <sitewhere>ba56d5db-c7b3-4605-ac81-14d8a9de7d18</sitewhere>
+    <table>SB9-L1</table>
   </sensor>
   <sensor>
     <name>纵十七路7YS17660</name>
@@ -448,6 +514,7 @@
     <node>14</node>
     <model>MX9110</model>
     <sitewhere>eb493dd6-da3d-4ac5-80ec-db1336ed6931</sitewhere>
+    <table>O2-L1</table>
   </sensor>
   <sensor>
     <name>海明路与金辉街交口4YS2041</name>
@@ -455,6 +522,7 @@
     <node>16</node>
     <model>MX9110</model>
     <sitewhere>6fe3beb2-623c-4f4f-a22b-222dd0034a2c</sitewhere>
+    <table>P1-S2</table>
   </sensor>
   <sensor>
     <name>民生路与金辉街交口4YS2029</name>
@@ -462,6 +530,7 @@
     <node>18</node>
     <model>MX9110</model>
     <sitewhere>83a1b638-290b-47be-b21e-7ec40c3fd99b</sitewhere>
+    <table>P2-S2</table>
   </sensor>
   <sensor>
     <name>市政府总出水管</name>
@@ -469,6 +538,7 @@
     <node>17</node>
     <model>MX9110</model>
     <sitewhere>a7fab0fa-0aa4-4908-b01c-b8ca50fb468b</sitewhere>
+    <table>SB2-N1</table>
   </sensor>
 </config>
 
